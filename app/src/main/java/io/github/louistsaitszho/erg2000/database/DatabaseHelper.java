@@ -25,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   private static final String ACTION_CREATE_TABLE = "CREATE TABLE";
   private static final String ACTION_FOREIGN_KEY = "FOREIGN KEY";
   private static final String ACTION_PRIMARY_KEY = "PRIMARY KEY";
+  private static final String ACTION_NOT_NULL = "NOT NULL";
   private static final String ACTION_AUTOINCREMENT = "AUTOINCREMENT";
   private static final String ACTION_REFERENCES = "REFERENCES";
   private static final String ACTION_SELECT = "SELECT";
@@ -32,6 +33,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   private static final String ACTION_ALL = "*";
   private static final String ACTION_WHERE = "WHERE";
   private static final String ACTION_EQUALS = "=";
+  private static final String ACTION_INNER_JOIN = "INNER JOIN";
+  private static final String ACTION_ON = "ON";
 
   private static final String DATATYPE_INTEGER = "INTEGER";
   private static final String DATATYPE_REAL = "REAL";
@@ -65,35 +68,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   private static final String TAGS_VS_RECORDS_TAG_ID = "tag_id";
 
   private static final String CREATE_TABLE_RECORDS = ACTION_CREATE_TABLE + " " + TABLE_RECORDS + "(" +
-      RECORDS_ID +              " " + DATATYPE_INTEGER + " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
-      RECORDS_START_TIMESTAMP + " " + DATATYPE_INTEGER +  ", " +
-      RECORDS_DURATION +        " " + DATATYPE_INTEGER +  ", " +
-      RECORDS_DISTANCE +        " " + DATATYPE_REAL +     ", " +
-      RECORDS_RATING +          " " + DATATYPE_INTEGER +  ", " +
+      RECORDS_ID +              " " + DATATYPE_INTEGER +  " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
+      RECORDS_START_TIMESTAMP + " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
+      RECORDS_DURATION +        " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
+      RECORDS_DISTANCE +        " " + DATATYPE_REAL +     " " + ACTION_NOT_NULL + ", " +
+      RECORDS_RATING +          " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
       RECORDS_REMARK +          " " + DATATYPE_TEXT +     ", " +
       ")";
 
   private static final String CREATE_TABLE_TAGS = ACTION_CREATE_TABLE + " " + TABLE_TAG + "(" +
-      TAG_ID + " " + DATATYPE_INTEGER + " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
-      TAG_TAG + " " + DATATYPE_TEXT +
+      TAG_ID +  " " + DATATYPE_INTEGER + " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
+      TAG_TAG + " " + DATATYPE_TEXT + " " + ACTION_NOT_NULL +
       ")";
 
   private static final String CREATE_TABLE_SECTIONS = ACTION_CREATE_TABLE + " " + TABLE_SECTIONS + "(" +
-      SECTIONS_ID +           " " + DATATYPE_INTEGER + " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
-      SECTIONS_RECORD_ID +    " " + DATATYPE_INTEGER +  ", " +
-      SECTIONS_ORDER +        " " + DATATYPE_INTEGER +  ", " +
-      SECTIONS_REST_OR_EASY + " " + DATATYPE_INTEGER +  ", " +
+      SECTIONS_ID +           " " + DATATYPE_INTEGER +  " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
+      SECTIONS_RECORD_ID +    " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
+      SECTIONS_ORDER +        " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
+      SECTIONS_REST_OR_EASY + " " + DATATYPE_INTEGER +  " " + ACTION_NOT_NULL + ", " +
       SECTIONS_DURATION +     " " + DATATYPE_INTEGER +  ", " +
       SECTIONS_DISTANCE +     " " + DATATYPE_REAL +     ", " +
       SECTIONS_RATING +       " " + DATATYPE_INTEGER +  ", " +
       ACTION_FOREIGN_KEY + "(" + SECTIONS_RECORD_ID + ") " + ACTION_REFERENCES + " " + TABLE_RECORDS + "(" + RECORDS_ID + ")" +
       ")";
 
+  /**
+   * CREATE TABLE tags_vs_records(
+   * id INTEGER PRIMARY KEY AUTOINCREMENT,
+   * record_id INTEGER NOT NULL,
+   * tag_id INTEGER NOT NULL,
+   * FOREIGN KEY(record_id) REFERENCES records(id),
+   * FOREIGN KEY(tag_id) REFERENCE tags(id))
+   */
   private static final String CREATE_TABLE_TAGS_VS_RECORDS = ACTION_CREATE_TABLE + " " + TABLE_TAGS_VS_RECORDS + "(" +
       TAGS_VS_RECORDS_ID +        " " + DATATYPE_INTEGER + " " + ACTION_PRIMARY_KEY + " " + ACTION_AUTOINCREMENT + ", " +
-      TAGS_VS_RECORDS_RECORD_ID + " " + DATATYPE_INTEGER + ", " +
-      TAGS_VS_RECORDS_TAG_ID +    " " + DATATYPE_INTEGER + ", " +
-      ACTION_FOREIGN_KEY + "(" + TAGS_VS_RECORDS_RECORD_ID + ") " + ACTION_REFERENCES + " " + TABLE_RECORDS + "(" + RECORDS_ID + ")" +
+      TAGS_VS_RECORDS_RECORD_ID + " " + DATATYPE_INTEGER + " " + ACTION_NOT_NULL + ", " +
+      TAGS_VS_RECORDS_TAG_ID +    " " + DATATYPE_INTEGER + " " + ACTION_NOT_NULL + ", " +
+      ACTION_FOREIGN_KEY + "(" + TAGS_VS_RECORDS_RECORD_ID + ") " + ACTION_REFERENCES + " " + TABLE_RECORDS + "(" + RECORDS_ID + "), " +
       ACTION_FOREIGN_KEY + "(" + TAGS_VS_RECORDS_TAG_ID + ") " + ACTION_REFERENCES + " " + TABLE_TAG + "(" + TAG_ID + ")" +
       ")";
 
@@ -114,6 +125,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //TODO later
   }
 
+  /**
+   *
+   * @return
+   */
   public List<Record> getAllRecords() {
     SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
     String query = ACTION_SELECT + " " + ACTION_ALL + " " + ACTION_FROM + TABLE_RECORDS;
@@ -136,10 +151,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   }
 
   /**
-   *
-   * @param record
-   * @param newTags
-   * @return
+   * Add a record to the db
+   * @param record i.e. new record - newTags
+   * @param newTags i.e. new tags that does not exist in the db before
+   * @return the row id of that record in long
    */
   public long addRecord(Record record, List<Tag> newTags) {
     //insert new tags
@@ -159,11 +174,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     for (Tag tag: record.getTags()) {
       newTagsIDs.add(Long.valueOf(tag.getID()));
     }
-    addTagsVsRecordss(record.getID(), newTagsIDs);
+    addTagsVsRecordss(id, newTagsIDs);
 
     return id;
   }
 
+  /**
+   * Add list of tags
+   * @param newTags i.e. list of tags
+   * @return list of row ids in long
+   */
   private List<Long> addTags(List<Tag> newTags) {
     List<Long> ids = new ArrayList<>(newTags.size());
     for (Tag tag: newTags) {
@@ -172,7 +192,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     return ids;
   }
 
-  public long addTag(Tag tag) {
+  /**
+   * Add a tag
+   * @param tag dah
+   * @return the row id of this tag in long
+   */
+  private long addTag(Tag tag) {
     SQLiteDatabase sqLiteDatabase = getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put(TAG_TAG, tag.getTag());
@@ -183,6 +208,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     return null;
   }
 
+  /**
+   * Get every tags
+   * @return
+   */
   public List<Tag> getAllTags() {
     SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
     String query = ACTION_SELECT + " " + ACTION_ALL + " " + ACTION_FROM + TABLE_TAG;
@@ -197,11 +226,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     return tags;
   }
 
+  /**
+   * Get evert tags related to a specific record
+   * @param recordID
+   * @return
+   */
   public List<Tag> getRelatedTags(int recordID) {
-    return null;
+    SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+    //SELECT * FROM tags INNER JOIN records on records.id = tags_vs_records.record_id WHERE tags_vs_records.record_id = $recordID
+    String query = ACTION_SELECT + " " + ACTION_ALL + " " +
+        ACTION_FROM + " " + TABLE_TAG + " " +
+        ACTION_INNER_JOIN + " " + TABLE_RECORDS + " " + ACTION_ON + " " + TABLE_RECORDS + "." + RECORDS_ID + ACTION_EQUALS + TABLE_TAGS_VS_RECORDS + "." + TAGS_VS_RECORDS_RECORD_ID + " " +
+        ACTION_WHERE + " " + TABLE_TAGS_VS_RECORDS + "." + TAGS_VS_RECORDS_RECORD_ID + ACTION_EQUALS + String.valueOf(recordID);
+    List<Tag> tags = new ArrayList<>();
+    Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+    if (cursor.moveToFirst()) {
+      do{
+        tags.add(new Tag(cursor.getInt(cursor.getColumnIndex(TAG_ID)), cursor.getString(cursor.getColumnIndex(TAG_TAG))));
+      } while (cursor.moveToNext());
+      cursor.close();
+    }
+    return tags;
   }
 
-  private List<Long> addTagsVsRecordss(int recordID, List<Long> tagIDs) {
+  /**
+   *
+   * @param recordID
+   * @param tagIDs
+   * @return
+   */
+  private List<Long> addTagsVsRecordss(long recordID, List<Long> tagIDs) {
     List<Long> ids = new ArrayList<>(tagIDs.size());
     for (long l:tagIDs) {
       ids.add(addTagsVsRecords(recordID, l));
@@ -209,7 +263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     return ids;
   }
 
-  private long addTagsVsRecords(int recordID, long tagID) {
+  private long addTagsVsRecords(long recordID, long tagID) {
     SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put(TAGS_VS_RECORDS_TAG_ID, tagID);

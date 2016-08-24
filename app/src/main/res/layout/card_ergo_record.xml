@@ -15,13 +15,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/DurationRatingLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/DurationTV"
+                android:id="@+id/tvDuration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -35,7 +34,7 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/RatingTV"
+                android:id="@+id/tvRating"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
@@ -83,7 +82,6 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:id="@+id/DistanceStartDateTimeLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

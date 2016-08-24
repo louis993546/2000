@@ -54,8 +54,8 @@ public class HistoryFragment extends Fragment {
   }
 
   public class RVVH extends RecyclerView.ViewHolder {
-    @BindView(R.id.DurationTV) TextView tvDuration;
-    @BindView(R.id.RatingTV) TextView tvRating;
+    @BindView(R.id.tvDuration) TextView tvDuration;
+    @BindView(R.id.tvRating) TextView tvRating;
     @BindView(R.id.p5mValueTV) TextView tvP5mValue;
     @BindView(R.id.DistanceTV) TextView tvDistance;
     @BindView(R.id.startDateTimeTV) TextView tvStartDateTime;
