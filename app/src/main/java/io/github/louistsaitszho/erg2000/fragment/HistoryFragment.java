@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
+import io.github.louistsaitszho.erg2000.RealmController;
+import io.github.louistsaitszho.erg2000.realmObject.Record;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class HistoryFragment extends Fragment {
   public static final String TAG = HistoryFragment.class.getSimpleName();
@@ -21,8 +27,6 @@ public class HistoryFragment extends Fragment {
 
   public static HistoryFragment newInstance() {
     HistoryFragment fragment = new HistoryFragment();
-    Bundle args = new Bundle();
-    fragment.setArguments(args);
     return fragment;
   }
 
@@ -33,10 +37,8 @@ public class HistoryFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-    }
+    RealmResults<Record> records = RealmController.with(this).allRecords();
+    Log.d(TAG, "size: " + String.valueOf(records.size()));
   }
 
   @Override

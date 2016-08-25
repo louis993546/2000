@@ -1,5 +1,6 @@
 package io.github.louistsaitszho.erg2000;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -48,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
     inflateBottomNavigationBar();
     floatingActionButton.setImageDrawable(new IconicsDrawable(this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus));
+    floatingActionButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        openAddRecordActivity();
+      }
+    });
 
     if (fragmentContainer != null) {
       if (savedInstanceState != null) {
@@ -146,6 +154,11 @@ public class MainActivity extends AppCompatActivity {
         .withAboutDescription("Keep track of your indoor rowing record")
         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
         .start(this);
+  }
+
+  private void openAddRecordActivity() {
+    Intent intent = new Intent(this, AddRecordActivity.class);
+    startActivity(intent);
   }
 
 }

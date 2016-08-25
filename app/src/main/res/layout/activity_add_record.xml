@@ -24,13 +24,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -40,116 +39,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/DurationRatingLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvDuration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:gravity="right"
-                        android:padding="16dp"
-                        android:text="30:00" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/darker_gray" />
-
-                    <TextView
-                        android:id="@+id/tvRating"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="6"
-                        android:gravity="right"
-                        android:padding="16dp"
-                        android:text="18 s/min" />
-
-                </LinearLayout>
+                <include layout="@layout/item_row_record"/>
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="2dp"
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/p5mValueTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:gravity="right|center_vertical"
-                        android:padding="16dp"
-                        android:text="2:08.3"
-                        android:textSize="36sp" />
-
-                    <TextView
-                        android:id="@+id/p5mUnitTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="left|bottom"
-                        android:padding="16dp"
-                        android:text="/500m"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
-
-                <LinearLayout
-                    android:id="@+id/DistanceStartDateTimeLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/DistanceTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:gravity="right"
-                        android:padding="16dp"
-                        android:text="7000m" />
-
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/darker_gray" />
-
-                    <TextView
-                        android:id="@+id/startDateTimeTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="6"
-                        android:gravity="right"
-                        android:padding="16dp"
-                        android:text="" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:background="@android:color/darker_gray" />
-
-                <LinearLayout
+                    android:id="@+id/llDateTime"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:orientation="vertical"
-                    android:layout_marginLeft="32dp"
+                    android:paddingLeft="32dp"
                     android:gravity="center_vertical">
 
                     <TextView
@@ -159,6 +61,7 @@
                         android:textSize="12sp"/>
 
                     <TextView
+                        android:id="@+id/tvStartDateTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="2016/1/1 14:02"
@@ -184,14 +87,14 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginTop="4dp">
+                    android:paddingLeft="32dp"
+                    android:paddingTop="4dp">
 
                     <android.support.design.widget.TextInputEditText
+                        android:id="@+id/tietRemark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Remark"
-                        android:text="Blah blah blah"
                         android:lines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -203,8 +106,44 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+            <LinearLayout
+                android:id="@+id/rows"
+                android:layout_below="@id/llCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/fam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:fab_addButtonColorNormal="@color/colorAccent"
+        app:fab_addButtonColorPressed="@color/colorAccent"
+        app:fab_addButtonPlusIconColor="@color/colorPrimary"
+        app:theme="@style/AppTheme"
+        app:fab_labelStyle="@style/menu_labels_style"
+        app:fab_labelsPosition="left">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_title="Row"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabRest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_title="Rest"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

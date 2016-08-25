@@ -1,0 +1,42 @@
+package io.github.louistsaitszho.erg2000.realmObject;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
+
+/**
+ * Created by Louis on 24/8/2016.
+ */
+
+public class Tag extends RealmObject {
+  @Required @PrimaryKey String id;
+  @Required String tag;
+
+  public Tag() {
+
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getTag() {
+    return tag;
+  }
+
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  @Override
+  public String toString() {
+    return "Tag{" +
+        "id='" + id + '\'' +
+        ", tag='" + tag + '\'' +
+        '}';
+  }
+}
