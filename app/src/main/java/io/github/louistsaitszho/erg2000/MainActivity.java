@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
 
     inflateBottomNavigationBar();
-    floatingActionButton.setImageDrawable(new IconicsDrawable(this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus));
+    floatingActionButton.setImageDrawable(new IconicsDrawable(this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus).sizeDp(12));
     floatingActionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {

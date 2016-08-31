@@ -13,6 +13,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
+ * Use this controller to access the Realm db
  * Created by Louis on 24/8/2016.
  */
 

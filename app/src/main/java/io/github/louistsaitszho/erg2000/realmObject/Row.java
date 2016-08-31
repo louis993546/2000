@@ -1,5 +1,6 @@
 package io.github.louistsaitszho.erg2000.realmObject;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import io.realm.RealmObject;
@@ -10,7 +11,7 @@ import io.realm.annotations.Required;
  * Created by Louis on 24/8/2016.
  */
 
-public class Row extends RealmObject {
+public class Row extends RealmObject implements Serializable{
   @Required @PrimaryKey String id;  //8-digit of base. see http://stackoverflow.com/a/5351326/2384934
   boolean isEasy;                   //is it easy-ing/resting
   long order;                       //Order of this row in its record
@@ -22,15 +23,18 @@ public class Row extends RealmObject {
 
   }
 
-  public Row(boolean isEasy, int order, long distance, long duration, Long rating) {
+  public Row(boolean isEasy, long distance, long duration, Long rating) {
     byte[] r = new byte[8];
     new Random().nextBytes(r);
     this.id = new String(r);
     this.isEasy = isEasy;
-    this.order = order;
     this.distance = distance;
     this.duration = duration;
     this.rating = rating;
+  }
+
+  public Row (boolean isEasy, long distance, long duration, int rating) {
+    this(isEasy, distance, duration, (long) rating);
   }
 
   public String getId() {
@@ -51,6 +55,14 @@ public class Row extends RealmObject {
 
   public long getOrder() {
     return order;
+  }
+
+  /**
+   * It may overflow (very unlikely though)
+   * @return
+   */
+  public int getOrderInt() {
+    return (int) order;
   }
 
   public void setOrder(long order) {

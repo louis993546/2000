@@ -1,25 +1,27 @@
 package io.github.louistsaitszho.erg2000;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 
@@ -28,29 +30,35 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.louistsaitszho.erg2000.fragment.NewRowOrRestDialogFragment;
 import io.github.louistsaitszho.erg2000.realmObject.Row;
 
-public class AddRecordActivity extends AppCompatActivity {
+public class AddRecordActivity extends AppCompatActivity implements NewRowOrRestDialogFragment.DialogListener{
   public static final String TAG = AddRecordActivity.class.getSimpleName();
-  List<Row> rowList = new ArrayList<>();
+  SparseArray<Row> rowSparseArray;
 
   long averageRating = 0;
   long totalDistance = 0;
   long totalDuration = 0;
 
-  @BindView(R.id.toolbar) Toolbar toolbar;
+  @BindView(R.id.toolbar)             Toolbar toolbar;
 
-  @BindView(R.id.tvDuration)      TextView tvDuration;
-  @BindView(R.id.tvRating)        TextView tvRating;
-  @BindView(R.id.p5mValueTV)      TextView tvPer500m;
-  @BindView(R.id.DistanceTV)      TextView tvDistance;
-  @BindView(R.id.llDateTime)      LinearLayout llDateTime;
-  @BindView(R.id.tvStartDateTime) TextView tvStartDateTime;
-  @BindView(R.id.tietRemark)      TextInputEditText tietRemark;
-  @BindView(R.id.rows)            LinearLayout llRowsContainer;
-  @BindView(R.id.fam)             FloatingActionsMenu fam;
-  @BindView(R.id.fabRow)          FloatingActionButton fabRow;
-  @BindView(R.id.fabRest)         FloatingActionButton fabRest;
+  @BindView(R.id.tvTime)        TextView tvTotalTime;
+  @BindView(R.id.tvMeter)       TextView tvTotalDistance;
+  @BindView(R.id.tvPace)        TextView tvAveragePace;
+  @BindView(R.id.tvRating)      TextView tvAverageRating;
+  @BindView(R.id.rlRows)        RecyclerView recyclerView;
+  @BindView(R.id.bRest)         Button bRest;
+  @BindView(R.id.bRow)          Button bRow;
+
+  @BindView(R.id.ivEventDescription)  ImageView ivEventDescription;
+  @BindView(R.id.ivStartDateTime)     ImageView ivStartDateTime;
+  @BindView(R.id.ivTags)              ImageView ivTags;
+  @BindView(R.id.ivRemark)            ImageView ivRemark;
+  @BindView(R.id.ivImages)            ImageView ivImages;
+  @BindView(R.id.rlImage)             RelativeLayout rlImage;
+
+  RVA adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -59,89 +67,42 @@ public class AddRecordActivity extends AppCompatActivity {
     ButterKnife.bind(this);
 
     toolbar.setTitle("New Record");
+    setSupportActionBar(toolbar);
 
-    //TODO back button
-
-    fabRow.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(AddRecordActivity.this, R.color.colorPrimary)).icon(CommunityMaterial.Icon.cmd_rowing).actionBar());
-    fabRow.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        new MaterialDialog.Builder(AddRecordActivity.this)
-            .title("Row")
-            .positiveText("Add")
-            .positiveColor(getResources().getColor(R.color.colorPrimary))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-              @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                Row row = ((NewRowOrRestCustomView) dialog.getCustomView()).getData();
-                Log.d(TAG, row.toString());
-                rowList.add(row);
-                llRowsContainer.addView(new CardCustomView(AddRecordActivity.this, row));
-                calculateNewAverages();
-                updateTotals();
-              }
-            })
-            .negativeColor(getResources().getColor(android.R.color.darker_gray))
-            .negativeText("Discard")
-            .customView(
-                new NewRowOrRestCustomView(AddRecordActivity.this, false, rowList.size()-1),
-                false)
-            .show();
-        fam.collapse();
-      }
-    });
-
-    fabRest.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(AddRecordActivity.this, R.color.colorPrimary)).icon(CommunityMaterial.Icon.cmd_cup_water).actionBar());
-    fabRest.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        new MaterialDialog.Builder(AddRecordActivity.this)
-            .title("Rest")
-            .positiveText("Add")
-            .positiveColor(getResources().getColor(R.color.colorPrimary))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-              @Override
-              public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                Row row = ((NewRowOrRestCustomView) dialog.getCustomView()).getData();
-                Log.d(TAG, row.toString());
-                rowList.add(row);
-                llRowsContainer.addView(new CardCustomView(AddRecordActivity.this, row));
-                calculateNewAverages();
-                updateTotals();
-              }
-            })
-            .negativeColor(getResources().getColor(android.R.color.darker_gray))
-            .negativeText("Discard")
-            .customView(
-                new NewRowOrRestCustomView(AddRecordActivity.this, true, rowList.size()-1),
-                false)
-            .show();
-        fam.collapse();
-      }
-    });
-  }
-
-  private void updateTotals() {
-    tvRating.setText(String.valueOf(averageRating));
-    tvDistance.setText(String.valueOf(totalDistance));
-    tvDuration.setText(Utils.msToDurationString(totalDuration));
-    if (totalDistance > 0)
-      tvPer500m.setText(Utils.generatePer500String(totalDuration, totalDistance));
-  }
-
-  private void calculateNewAverages() {
-    averageRating = 0;
-    double totalStrokes = 0;
-    totalDistance = 0;
-    totalDuration = 0;
-    for (Row r: rowList) {
-      if (!r.isEasy()) {
-        totalDistance += r.getDistance();
-        totalDuration += r.getDuration();
-        totalStrokes += (r.getDuration() / Consts.MS_IN_MINUTE) * r.getRating();
-      }
+    ActionBar supportActionBar = getSupportActionBar();
+    if (supportActionBar != null) {
+      supportActionBar.setDisplayHomeAsUpEnabled(true);
+      supportActionBar.setDisplayShowHomeEnabled(true);
     }
-    averageRating = Math.round(totalStrokes / (totalDuration / Consts.MS_IN_MINUTE));
+
+
+    ivEventDescription.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(this, R.color.colorIconGray)).sizeDp(16).icon(CommunityMaterial.Icon.cmd_rowing));
+    ivStartDateTime.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(this, R.color.colorIconGray)).sizeDp(16).icon(CommunityMaterial.Icon.cmd_clock));
+    ivTags.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(this, R.color.colorIconGray)).sizeDp(16).icon(CommunityMaterial.Icon.cmd_label));
+    ivRemark.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(this, R.color.colorIconGray)).sizeDp(16).icon(CommunityMaterial.Icon.cmd_clipboard_text));
+    ivImages.setImageDrawable(new IconicsDrawable(this).color(ContextCompat.getColor(this, R.color.colorIconGray)).sizeDp(16).icon(CommunityMaterial.Icon.cmd_image_multiple));
+
+    bRest.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        NewRowOrRestDialogFragment dialog = NewRowOrRestDialogFragment.newInstance(true);
+        dialog.show(getSupportFragmentManager(), "AddRow");
+      }
+    });
+
+    bRow.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        NewRowOrRestDialogFragment dialog = NewRowOrRestDialogFragment.newInstance(false);
+        dialog.show(getSupportFragmentManager(), "AddRow");
+      }
+    });
+
+    //TODO getExtra (edit record)
+    rowSparseArray = new SparseArray<>();
+    recyclerView.setLayoutManager(new LinearLayoutManager(AddRecordActivity.this, LinearLayoutManager.VERTICAL, false));
+    adapter = new RVA();
+    recyclerView.setAdapter(adapter);
   }
 
   @Override
@@ -152,45 +113,123 @@ public class AddRecordActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home)
+      this.onBackPressed();
     return super.onOptionsItemSelected(item);
-    //TODO
+
   }
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
-    //TODO confirm discard dialog
+    new MaterialDialog.Builder(AddRecordActivity.this)
+        .title("Leave")
+        .content("Are you sure? Everything will be gone forever")
+        .positiveText("Yes")
+        .onAny(new MaterialDialog.SingleButtonCallback() {
+          @Override
+          public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            dialog.dismiss();
+            if (which == DialogAction.POSITIVE) {
+              AddRecordActivity.super.finish();
+            }
+          }
+        })
+        .negativeText("No")
+        .show();
   }
 
-  public class CardCustomView extends CardView {
-    @BindView(R.id.tvDuration)    TextView tvDuration;
-    @BindView(R.id.tvRating)      TextView tvRating;
-    @BindView(R.id.tvRatingUnit)  TextView tvRatingUnit;
-    @BindView(R.id.p5mValueTV)    TextView tvP500m;
-    @BindView(R.id.DistanceTV)    TextView tvDistance;
-
-    @BindView(R.id.llPer500m)     LinearLayout llPer500m;
-    @BindView(R.id.viewLine)      View viewLine;
-
-    public CardCustomView(Context context, Row row) {
-      super(context);
-      LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View view = inflater.inflate(R.layout.card_ergo_record, this, true);
-      ButterKnife.bind(this, view);
-
-      //TODO turn long to time/distance/etc string
-      tvDuration.setText(Utils.msToDurationString(row.getDuration()));
-      if (row.isEasy()) {
-        tvRatingUnit.setText("Rest");
-        tvRating.setVisibility(INVISIBLE);
-        llPer500m.setVisibility(GONE);
-        viewLine.setVisibility(GONE);
-      } else {
-        tvRating.setText(String.valueOf(row.getRating()));
-        tvP500m.setText(Utils.generatePer500String(row.getDuration(), row.getDistance()));
+  private void calculateNewAverages() {
+    averageRating = 0;
+    double totalStrokes = 0;
+    totalDistance = 0;
+    totalDuration = 0;
+    for(int i = 0; i < rowSparseArray.size(); i++) {
+      int key = rowSparseArray.keyAt(i);
+      Row r = rowSparseArray.get(key);
+      if (!r.isEasy()) {
+        totalDistance += r.getDistance();
+        totalDuration += r.getDuration();
+        totalStrokes += (r.getDuration() / Consts.MS_IN_MINUTE) * r.getRating();
       }
-      tvDistance.setText(String.valueOf(row.getDistance()));
+    }
+    averageRating = Math.round(totalStrokes / (totalDuration / Consts.MS_IN_MINUTE));
+    Log.d(TAG, "new averages: " + averageRating + " " + totalDistance + " " + totalDuration);
+
+    tvTotalTime.setText(Utils.generateDurationString(totalDuration, false));
+    tvTotalDistance.setText(String.valueOf(totalDistance));
+    tvAveragePace.setText(Utils.generatePaceString(totalDuration, totalDistance));
+    tvAverageRating.setText(String.valueOf(averageRating));
+  }
+
+  @Override
+  public void onAddRow(Row row) {
+    Log.d(TAG, "onAddRow: " + row.toString());
+    row.setOrder(rowSparseArray.size());
+    rowSparseArray.put(row.getOrderInt(), row);
+    calculateNewAverages();
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onEditRow(Row oldRow, Row newRow) {
+    Log.d(TAG, "onEditRow;");
+
+  }
+
+  @Override
+  public void onCancel() {
+    Log.d(TAG, "onCancel;");
+  }
+
+  @Override
+  public void onDelete(Row row) {
+    Log.d(TAG, "onDelete;");
+
+  }
+
+  public class RVVH extends RecyclerView.ViewHolder {
+    @BindView(R.id.tvTime)    TextView tvTime;
+    @BindView(R.id.tvMeter)   TextView tvMeter;
+    @BindView(R.id.tvPace)    TextView tvPace;
+    @BindView(R.id.tvRating)  TextView tvRating;
+
+    public RVVH(View itemView) {
+      super(itemView);
+      ButterKnife.bind(this, itemView);
+    }
+  }
+
+  public class RVA extends RecyclerView.Adapter<RVVH> {
+
+    public RVA() {
     }
 
+    @Override
+    public RVVH onCreateViewHolder(ViewGroup parent, int viewType) {
+      return new RVVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_row, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(RVVH holder, int position) {
+      Log.d(TAG, "binding: " + position);
+      Row row = rowSparseArray.get(holder.getAdapterPosition());
+
+      holder.tvTime.setText(Utils.generateDurationString(row));
+      ArrayList<Long> previousDistances = new ArrayList<>();
+      for (int i = holder.getAdapterPosition()-1; i >= 0; i--) {
+        previousDistances.add(rowSparseArray.get(i).getDistance());
+      }
+      holder.tvMeter.setText(Utils.generateDistanceString(row.getDistance(), previousDistances));
+      if (!row.isEasy()) {
+        holder.tvPace.setText(Utils.generatePaceString(row));
+        holder.tvRating.setText(String.valueOf(row.getRating()));
+      }
+    }
+
+    @Override
+    public int getItemCount() {
+      return rowSparseArray.size();
+    }
   }
+
 }

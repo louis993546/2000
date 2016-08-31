@@ -15,15 +15,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.RealmController;
+import io.github.louistsaitszho.erg2000.Utils;
 import io.github.louistsaitszho.erg2000.realmObject.Record;
-import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class HistoryFragment extends Fragment {
   public static final String TAG = HistoryFragment.class.getSimpleName();
 
   @BindView(R.id.recyclerView) RecyclerView recyclerView;
+
+  RealmResults<Record> records;
 
   public static HistoryFragment newInstance() {
     HistoryFragment fragment = new HistoryFragment();
@@ -37,7 +38,7 @@ public class HistoryFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    RealmResults<Record> records = RealmController.with(this).allRecords();
+    records = RealmController.with(this).allRecords();
     Log.d(TAG, "size: " + String.valueOf(records.size()));
   }
 
@@ -58,7 +59,7 @@ public class HistoryFragment extends Fragment {
   public class RVVH extends RecyclerView.ViewHolder {
     @BindView(R.id.tvDuration) TextView tvDuration;
     @BindView(R.id.tvRating) TextView tvRating;
-    @BindView(R.id.p5mValueTV) TextView tvP5mValue;
+    @BindView(R.id.tvPace) TextView tvPace;
     @BindView(R.id.DistanceTV) TextView tvDistance;
     @BindView(R.id.startDateTimeTV) TextView tvStartDateTime;
     @BindView(R.id.llCard) LinearLayout llCard;
@@ -71,6 +72,7 @@ public class HistoryFragment extends Fragment {
   }
 
   /**
+   * TODO encourage user to add first item
    * TODO add "No more item" at the bottom
    * TODO update the card UI
    */
@@ -86,24 +88,28 @@ public class HistoryFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(RVVH holder, int position) {
-      if (position >= 10) {
-        holder.llCard.setVisibility(View.GONE);
-        holder.tvEnd.setVisibility(View.VISIBLE);
-      } else {
+      if (records != null && holder.getAdapterPosition() < records.size()) {
+        Record record = records.get(holder.getAdapterPosition());
         holder.llCard.setVisibility(View.VISIBLE);
         holder.tvEnd.setVisibility(View.GONE);
-        holder.tvDuration.setText("0:08:00");
-        holder.tvRating.setText("20 s/m");
-        holder.tvP5mValue.setText("02:00.0");
-        holder.tvDistance.setText("2000 m");
+        holder.tvDuration.setText(Utils.generateDurationString(record));
+        holder.tvRating.setText(String.valueOf(record.getAverageRating()));
+        holder.tvPace.setText(Utils.generatePaceString(record));
+        holder.tvDistance.setText(String.valueOf(record.getTotalDistance()));
         holder.tvStartDateTime.setText(String.valueOf(position));
+      } else {
+        holder.llCard.setVisibility(View.GONE);
+        holder.tvEnd.setVisibility(View.VISIBLE);
       }
     }
 
     @Override
     public int getItemCount() {
       //TODO get db
-      return (10 + 1);
+      if (records == null)
+        return 1;             //The nothing card
+      else
+        return (records.size() + 1);
     }
   }
 

@@ -1,14 +1,17 @@
 package io.github.louistsaitszho.erg2000.realmObject;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**
+ * Core concept: This should be self explanatory
  * Created by Louis on 24/8/2016.
  */
 
-public class Tag extends RealmObject {
+public class Tag extends RealmObject implements Serializable{
   @Required @PrimaryKey String id;
   @Required String tag;
 
