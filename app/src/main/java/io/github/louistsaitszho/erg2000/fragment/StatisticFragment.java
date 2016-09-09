@@ -1,6 +1,7 @@
 package io.github.louistsaitszho.erg2000.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,9 +13,12 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
 import com.db.chart.model.Point;
+import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
+import com.db.chart.view.animation.Animation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,14 +92,26 @@ public class StatisticFragment extends Fragment {
     @Override
     public void onBindViewHolder(RVVH holder, int position) {
       holder.tvTitle.setText("Best 500m");
-      LineChartView lineChartView = new LineChartView(getContext());
-      RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-      LineSet dataset = new LineSet(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"}, new float[]{1.0f, 1.0f, 2.0f, 3.0f, 5.0f, 8.0f, 8.13f, 8.21f, 8f, 3f, 1f});
-      dataset.addPoint(new Point("12", 2f));
-      dataset.addPoint("13", 3f);
-      dataset.setSmooth(true);
-      lineChartView.setLayoutParams(params);
-      holder.flContainer.addView(lineChartView);
+
+      LineChartView mChart = new LineChartView(getContext());
+      final String[] mLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"};
+      final float[][] mValues = {{0f, 2f, 1.4f, 4.f, 3.5f, 4.3f, 2f, 4f, 6.f},
+          {1.5f, 2.5f, 1.5f, 5f, 4f, 5f, 4.3f, 2.1f, 1.4f}};
+      LineSet dataset = new LineSet(mLabels, mValues[0]);
+      dataset
+          .setColor(Color.parseColor("#53c1bd"))
+          .setFill(Color.parseColor("#3d6c73"))
+          .setGradientFill(new int[]{Color.parseColor("#364d5a"), Color.parseColor("#3f7178")}, null);
+      mChart.addData(dataset);
+
+      mChart.setBorderSpacing(1)
+          .setXLabels(AxisController.LabelPosition.NONE)
+          .setYLabels(AxisController.LabelPosition.NONE)
+          .setXAxis(true)
+          .setYAxis(false)
+          .setBorderSpacing(Tools.fromDpToPx(5));
+      mChart.show();
+      holder.flContainer.addView(mChart);
     }
 
     @Override

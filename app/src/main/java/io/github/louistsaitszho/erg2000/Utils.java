@@ -98,7 +98,7 @@ public class Utils {
       previously += l;
     }
     previously += theDistance;
-    return String.valueOf(theDistance) + "(" + String.valueOf(previously) + ")";
+    return String.valueOf(theDistance) + "|" + String.valueOf(previously);
   }
 
   public static long hmsdToLong(int h, int m, int s, int d) {

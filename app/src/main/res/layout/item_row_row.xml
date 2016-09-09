@@ -9,25 +9,27 @@
         android:id="@+id/tvTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="6"
         android:textAlignment="textEnd"
         android:gravity="end"
+        android:text="0:00.0"
         android:fontFamily="monospace"/>
 
     <TextView
         android:id="@+id/tvMeter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="8"
         android:textAlignment="textEnd"
         android:gravity="end"
+        android:text="0"
         android:fontFamily="monospace"/>
 
     <TextView
         android:id="@+id/tvPace"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:textAlignment="textEnd"
         android:gravity="end"
         android:fontFamily="monospace"/>
@@ -36,7 +38,7 @@
         android:id="@+id/tvRating"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:textAlignment="textEnd"
         android:gravity="end"
         android:fontFamily="monospace"/>

@@ -137,12 +137,11 @@ public class NewRowOrRestDialogFragment extends DialogFragment {
       npvRating.setWrapSelectorWheel(false);
     }
 
-
     builder.setView(v)
-        .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            Log.d("qqq", "3");
+            Log.d("qqq", "1");
           }
         })
         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -150,13 +149,17 @@ public class NewRowOrRestDialogFragment extends DialogFragment {
           public void onClick(DialogInterface dialogInterface, int i) {
             Log.d("qqq", "2");
           }
-        })
-        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialogInterface, int i) {
-        Log.d("qqq", "1");
-      }
-    });
+        });
+
+    if (thisRow != null) {
+      builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          Log.d("qqq", "3");
+        }
+      });
+    }
+
     return builder.create();
   }
 
