@@ -14,7 +14,7 @@ import io.realm.annotations.Required;
  */
 
 public class Record extends RealmObject implements Serializable{
-  @Required @PrimaryKey String id;
+//  @Required @PrimaryKey String id;
   @Required Date startDateTime;
   String event;
   long totalDuration;
@@ -29,13 +29,13 @@ public class Record extends RealmObject implements Serializable{
 
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
+//  public String getId() {
+//    return id;
+//  }
+//
+//  public void setId(String id) {
+//    this.id = id;
+//  }
 
   public Date getStartDateTime() {
     return startDateTime;
@@ -112,8 +112,7 @@ public class Record extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Record{" +
-        "id='" + id + '\'' +
-        ", startDateTime=" + startDateTime +
+        "startDateTime=" + startDateTime +
         ", event='" + event + '\'' +
         ", totalDuration=" + totalDuration +
         ", totalDistance=" + totalDistance +

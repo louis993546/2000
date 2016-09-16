@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
@@ -18,6 +20,7 @@ import io.github.louistsaitszho.erg2000.RealmController;
 import io.github.louistsaitszho.erg2000.Utils;
 import io.github.louistsaitszho.erg2000.realmObject.Record;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class HistoryFragment extends Fragment {
   public static final String TAG = HistoryFragment.class.getSimpleName();
@@ -38,7 +41,7 @@ public class HistoryFragment extends Fragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    records = RealmController.with(this).allRecords();
+    records = RealmController.with(this).allRecords().sort("startDateTime", Sort.DESCENDING);
     Log.d(TAG, "size: " + String.valueOf(records.size()));
   }
 
@@ -96,10 +99,16 @@ public class HistoryFragment extends Fragment {
         holder.tvRating.setText(String.valueOf(record.getAverageRating()));
         holder.tvPace.setText(Utils.generatePaceString(record));
         holder.tvDistance.setText(String.valueOf(record.getTotalDistance()));
-        holder.tvStartDateTime.setText(String.valueOf(position));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy/M/d kk:mm");
+        holder.tvStartDateTime.setText(simpleDateFormat.format(record.getStartDateTime()));
       } else {
         holder.llCard.setVisibility(View.GONE);
         holder.tvEnd.setVisibility(View.VISIBLE);
+        if (position == 0) {
+          holder.tvEnd.setText(R.string.no_records);
+        } else {
+          holder.tvEnd.setText(R.string.end_of_list);
+        }
       }
     }
 

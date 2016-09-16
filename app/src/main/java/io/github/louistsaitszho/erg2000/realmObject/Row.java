@@ -12,7 +12,7 @@ import io.realm.annotations.Required;
  */
 
 public class Row extends RealmObject implements Serializable{
-  @Required @PrimaryKey String id;  //8-digit of base. see http://stackoverflow.com/a/5351326/2384934
+//  @Required @PrimaryKey String id;  //8-digit of base. see http://stackoverflow.com/a/5351326/2384934
   boolean isEasy;                   //is it easy-ing/resting
   long order;                       //Order of this row in its record
   long distance;                    //distance in m
@@ -26,7 +26,7 @@ public class Row extends RealmObject implements Serializable{
   public Row(boolean isEasy, long distance, long duration, Long rating) {
     byte[] r = new byte[8];
     new Random().nextBytes(r);
-    this.id = new String(r);
+//    this.id = new String(r);
     this.isEasy = isEasy;
     this.distance = distance;
     this.duration = duration;
@@ -37,13 +37,13 @@ public class Row extends RealmObject implements Serializable{
     this(isEasy, distance, duration, (long) rating);
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
+//  public String getId() {
+//    return id;
+//  }
+//
+//  public void setId(String id) {
+//    this.id = id;
+//  }
 
   public boolean isEasy() {
     return isEasy;
@@ -96,8 +96,7 @@ public class Row extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Row{" +
-        "id='" + id + '\'' +
-        ", isEasy=" + isEasy +
+        "isEasy=" + isEasy +
         ", order=" + order +
         ", distance=" + distance +
         ", duration=" + duration +

@@ -36,6 +36,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.fragment.NewRowOrRestDialogFragment;
+import io.github.louistsaitszho.erg2000.realmObject.Record;
 import io.github.louistsaitszho.erg2000.realmObject.Row;
 import io.github.louistsaitszho.erg2000.realmObject.Tag;
 import io.realm.Realm;
@@ -53,7 +55,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
   public static final String TAG = AddRecordActivity.class.getSimpleName();
 
   SparseArray<Row> rowSparseArray;
-  long startDateTime;
+  long startDateTime;               //Include time zone
   HashMap<String, Tag> tagHashMap;
   List<String> tagsString;
 
@@ -134,12 +136,12 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
     recyclerView.setAdapter(recyclerViewAdapter);
 
     RealmResults<Tag> tags = Realm.getDefaultInstance().where(Tag.class).findAll();
-    tagHashMap = new HashMap<>(tags.size());
+//    tagHashMap = new HashMap<>(tags.size());
     List<String> tagStringList = new ArrayList<>(tags.size());
-    for (Tag t: tags) {
-      tagStringList.add(t.getTag());
-      tagHashMap.put(t.getTag(), t);
-    }
+//    for (Tag t: tags) {
+//      tagStringList.add(t.getTag());
+//      tagHashMap.put(t.getTag(), t);
+//    }
     tagsAdapter = new ArrayAdapter(AddRecordActivity.this, android.R.layout.simple_list_item_1, tagStringList);
     tetTags.setAdapter(tagsAdapter);
     tetTags.setTagsListener(new TagsEditText.TagsEditListener() {
@@ -206,7 +208,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
         /**
          * TODO
          * 1. validate everything
-         *    1. startdatetime cannot be empty
+         *    1. startdatetime cannot be empty/invalid
          *    2. need to have at least 1 row of "row"
          * 2. use hashmap to turn strings to list of old and new tags
          * 3. images to byte[]
@@ -217,6 +219,69 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
          *    4. create new record
          *    5. connecting everything to record
          */
+
+        boolean anyError = false;
+
+        //I am not sure why I don't have to factor in the time zone
+        Log.d(TAG, System.currentTimeMillis() + " vs " + (startDateTime));  //TODO check if startDateTime + total time > current time (i.e. event started but not finished yet)
+        if (startDateTime> System.currentTimeMillis()) {
+          Log.d(TAG, "record starts in future");
+          tvStartDateTime.setError("Nice try Doctor");
+          anyError = true;
+        } else if (startDateTime < 0) {
+          Log.d(TAG, "record started in 1970");
+          tvStartDateTime.setError("Nice try Doctor");
+          anyError = true;
+        } else {
+          tvStartDateTime.setError(null);
+        }
+
+        if (rowSparseArray.size() <= 0) {
+          anyError = true;
+          Log.d(TAG, "no records");
+          //TODO tell user
+        } else {
+          boolean valid = false;
+          int currentPosition = 0;
+          while (!valid && currentPosition < rowSparseArray.size()) {
+            if (!rowSparseArray.get(currentPosition).isEasy())
+              valid = true;
+            currentPosition++;
+          }
+          if (!valid) {
+            Log.d(TAG, "no row is row");
+            //TODO tell user
+            anyError = true;
+          }
+        }
+
+        if (!anyError) {
+          Log.d(TAG, "can save");
+          //TODO progress bar
+          MaterialDialog progressDialog = new MaterialDialog.Builder(AddRecordActivity.this)
+              .title("Adding...")
+              .content("Just a sec...")
+              .progress(true, 0)
+              .show();
+          Realm realm = Realm.getDefaultInstance();
+          realm.beginTransaction();
+          Record newRecord = realm.createObject(Record.class);
+          newRecord.setStartDateTime(new Date(startDateTime));
+          if (etRemark.getText() != null)
+            newRecord.setRemark(etRemark.getText().toString());
+          newRecord.setTotalDistance(totalDistance);
+          newRecord.setTotalDuration(totalDuration);
+          newRecord.setAverageRating(averageRating);
+//          newRecord.setTags();
+//          newRecord.setRows();j
+          if (actvEventDescription.getText() != null)
+            newRecord.setEvent(actvEventDescription.getText().toString());
+          //TODO sparse array to list
+          realm.commitTransaction();
+          progressDialog.dismiss();
+          AddRecordActivity.this.finish();
+        }
+
       }
     });
   }

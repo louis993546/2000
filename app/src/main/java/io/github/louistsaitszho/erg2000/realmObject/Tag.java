@@ -12,20 +12,20 @@ import io.realm.annotations.Required;
  */
 
 public class Tag extends RealmObject implements Serializable{
-  @Required @PrimaryKey String id;
+//  @Required @PrimaryKey String id;
   @Required String tag;
 
   public Tag() {
 
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
+//  public String getId() {
+//    return id;
+//  }
+//
+//  public void setId(String id) {
+//    this.id = id;
+//  }
 
   public String getTag() {
     return tag;
@@ -38,8 +38,7 @@ public class Tag extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Tag{" +
-        "id='" + id + '\'' +
-        ", tag='" + tag + '\'' +
+        "tag='" + tag + '\'' +
         '}';
   }
 }
