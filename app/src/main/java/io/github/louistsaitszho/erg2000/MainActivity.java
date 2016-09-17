@@ -26,7 +26,7 @@ import io.github.louistsaitszho.erg2000.fragment.HistoryFragment;
 import io.github.louistsaitszho.erg2000.fragment.SearchFragment;
 import io.github.louistsaitszho.erg2000.fragment.StatisticFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HideFAB{
 
   public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -84,15 +84,15 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public boolean onTabSelected(int position, boolean wasSelected) {
         Log.d(TAG, "wasSelected = " + String.valueOf(wasSelected));
-        //TODO show/hide FAB
         switch (position) {
           case Consts.FRAGMENT_HISTORY:
-            if (wasSelected) {
-              //TODO call fragment to smooth scroll the RV to top
+            if (wasSelected && historyFragment != null) {
+              historyFragment.scrollToTop();
             } else {
               if (historyFragment == null)
                 historyFragment = HistoryFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+              floatingActionButton.setVisibility(View.VISIBLE);
               floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus));
             }
             break;
@@ -103,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
               if (searchFragment == null)
                 searchFragment = SearchFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).addToBackStack(null).commit();
-//              floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus));
+              floatingActionButton.setVisibility(View.VISIBLE);
+              floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_magnify));
             }
             break;
           case Consts.FRAGMENT_STATISTIC:
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
               if (statisticFragment == null)
                 statisticFragment = StatisticFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, statisticFragment).addToBackStack(null).commit();
+              floatingActionButton.setVisibility(View.VISIBLE);
               floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_filter));
             }
             break;
@@ -161,4 +163,9 @@ public class MainActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
+  @Override
+  public void hideFAB() {
+    if (floatingActionButton != null)
+      floatingActionButton.setVisibility(View.GONE);
+  }
 }

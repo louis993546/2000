@@ -14,28 +14,19 @@ import io.realm.annotations.Required;
  */
 
 public class Record extends RealmObject implements Serializable{
-//  @Required @PrimaryKey String id;
   @Required Date startDateTime;
   String event;
   long totalDuration;
   long totalDistance;
   long averageRating;
   String remark;
-  RealmList<Tag> tags;
-  RealmList<Row> rows;
-  RealmList<Image> images;
+  public RealmList<Tag> tags;
+  public RealmList<Row> rows;
+  public RealmList<Image> images;
 
   public Record() {
 
   }
-
-//  public String getId() {
-//    return id;
-//  }
-//
-//  public void setId(String id) {
-//    this.id = id;
-//  }
 
   public Date getStartDateTime() {
     return startDateTime;
@@ -81,16 +72,8 @@ public class Record extends RealmObject implements Serializable{
     return tags;
   }
 
-  public void setTags(RealmList<Tag> tags) {
-    this.tags = tags;
-  }
-
   public RealmList<Row> getRows() {
     return rows;
-  }
-
-  public void setRows(RealmList<Row> rows) {
-    this.rows = rows;
   }
 
   public String getEvent() {
@@ -105,10 +88,6 @@ public class Record extends RealmObject implements Serializable{
     return images;
   }
 
-  public void setImages(RealmList<Image> images) {
-    this.images = images;
-  }
-
   @Override
   public String toString() {
     return "Record{" +
@@ -118,9 +97,9 @@ public class Record extends RealmObject implements Serializable{
         ", totalDistance=" + totalDistance +
         ", averageRating=" + averageRating +
         ", remark='" + remark + '\'' +
-        ", tags=" + tags +
-        ", rows=" + rows +
-        ", images=" + images +
+        ", tags=" + tags.toString() +
+        ", rows=" + rows.toString() +
+        ", images=" + images.toString() +
         '}';
   }
 }

@@ -56,7 +56,6 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
 
   SparseArray<Row> rowSparseArray;
   long startDateTime;               //Include time zone
-  HashMap<String, Tag> tagHashMap;
   List<String> tagsString;
 
   long averageRating = 0;
@@ -136,13 +135,8 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
     recyclerView.setAdapter(recyclerViewAdapter);
 
     RealmResults<Tag> tags = Realm.getDefaultInstance().where(Tag.class).findAll();
-//    tagHashMap = new HashMap<>(tags.size());
-    List<String> tagStringList = new ArrayList<>(tags.size());
-//    for (Tag t: tags) {
-//      tagStringList.add(t.getTag());
-//      tagHashMap.put(t.getTag(), t);
-//    }
-    tagsAdapter = new ArrayAdapter(AddRecordActivity.this, android.R.layout.simple_list_item_1, tagStringList);
+    List<String> existingTags = new ArrayList<>(tags.size());
+    tagsAdapter = new ArrayAdapter(AddRecordActivity.this, android.R.layout.simple_list_item_1, existingTags);
     tetTags.setAdapter(tagsAdapter);
     tetTags.setTagsListener(new TagsEditText.TagsEditListener() {
       @Override
@@ -272,11 +266,31 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
           newRecord.setTotalDistance(totalDistance);
           newRecord.setTotalDuration(totalDuration);
           newRecord.setAverageRating(averageRating);
-//          newRecord.setTags();
-//          newRecord.setRows();j
           if (actvEventDescription.getText() != null)
             newRecord.setEvent(actvEventDescription.getText().toString());
-          //TODO sparse array to list
+
+          if (tagsString != null && tagsString.size() > 0) {
+            for (String tag:tagsString) {
+              Tag newTag = realm.createObject(Tag.class);
+              newTag.setTag(tag);
+              newRecord.tags.add(newTag);
+            }
+          }
+
+          for(int i = 0; i < rowSparseArray.size(); i++) {
+            Row newRow = realm.createObject(Row.class);
+            int key = rowSparseArray.keyAt(i);
+            Row r = rowSparseArray.get(key);
+            newRow.setEasy(r.isEasy());
+            newRow.setDistance(r.getDistance());
+            newRow.setDuration(r.getDuration());
+            newRow.setOrder(r.getOrder());
+            newRow.setRating(r.getRating());
+            newRecord.rows.add(newRow);
+          }
+
+//          newRecord.images.add();
+
           realm.commitTransaction();
           progressDialog.dismiss();
           AddRecordActivity.this.finish();

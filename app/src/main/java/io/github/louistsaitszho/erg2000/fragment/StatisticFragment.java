@@ -23,8 +23,9 @@ import com.db.chart.view.animation.Animation;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
+import io.github.louistsaitszho.erg2000.ScrollToTop;
 
-public class StatisticFragment extends Fragment {
+public class StatisticFragment extends Fragment implements ScrollToTop{
 
   @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
@@ -66,6 +67,15 @@ public class StatisticFragment extends Fragment {
     super.onResume();
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     recyclerView.setAdapter(new RVA());
+  }
+
+  @Override
+  public boolean scrollToTop() {
+    if (recyclerView != null) {
+      recyclerView.smoothScrollToPosition(0);
+      return true;
+    }
+    return false;
   }
 
   public class RVVH extends RecyclerView.ViewHolder {

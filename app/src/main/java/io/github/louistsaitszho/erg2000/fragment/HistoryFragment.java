@@ -1,6 +1,9 @@
 package io.github.louistsaitszho.erg2000.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,12 +20,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.RealmController;
+import io.github.louistsaitszho.erg2000.ScrollToTop;
 import io.github.louistsaitszho.erg2000.Utils;
 import io.github.louistsaitszho.erg2000.realmObject.Record;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends Fragment implements ScrollToTop {
   public static final String TAG = HistoryFragment.class.getSimpleName();
 
   @BindView(R.id.recyclerView) RecyclerView recyclerView;
@@ -56,7 +62,17 @@ public class HistoryFragment extends Fragment {
   public void onResume() {
     super.onResume();
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    recyclerView.setAdapter(new RVA());
+    recyclerView.setAdapter(new RRVA(getContext(), records, true));
+//    recyclerView.setAdapter(new RVA());
+  }
+
+  @Override
+  public boolean scrollToTop() {
+    if (recyclerView != null) {
+      recyclerView.smoothScrollToPosition(0);
+      return true;
+    }
+    return false;
   }
 
   public class RVVH extends RecyclerView.ViewHolder {
@@ -71,6 +87,47 @@ public class HistoryFragment extends Fragment {
     public RVVH(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+    }
+  }
+
+  private class RRVA extends RealmRecyclerViewAdapter<Record, RVVH> {
+
+    public RRVA(@NonNull Context context, @Nullable OrderedRealmCollection<Record> data, boolean autoUpdate) {
+      super(context, data, autoUpdate);
+    }
+
+    @Override
+    public RVVH onCreateViewHolder(ViewGroup parent, int viewType) {
+      return new RVVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_ergo_record, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(RVVH holder, int position) {
+      if (records != null && holder.getAdapterPosition() < records.size()) {
+        Record record = records.get(holder.getAdapterPosition());
+        Log.d(TAG, "inflating: " + record.toString());
+        holder.llCard.setVisibility(View.VISIBLE);
+        holder.tvEnd.setVisibility(View.GONE);
+        holder.tvDuration.setText(Utils.generateDurationString(record));
+        holder.tvRating.setText(String.valueOf(record.getAverageRating()));
+        holder.tvPace.setText(Utils.generatePaceString(record));
+        holder.tvDistance.setText(String.valueOf(record.getTotalDistance()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy/M/d kk:mm");
+        holder.tvStartDateTime.setText(simpleDateFormat.format(record.getStartDateTime()));
+      } else {
+        holder.llCard.setVisibility(View.GONE);
+        holder.tvEnd.setVisibility(View.VISIBLE);
+        if (position == 0) {
+          holder.tvEnd.setText(R.string.no_records);
+        } else {
+          holder.tvEnd.setText(R.string.end_of_list);
+        }
+      }
+    }
+
+    @Override
+    public int getItemCount() {
+      return super.getItemCount()+1;
     }
   }
 
@@ -93,6 +150,7 @@ public class HistoryFragment extends Fragment {
     public void onBindViewHolder(RVVH holder, int position) {
       if (records != null && holder.getAdapterPosition() < records.size()) {
         Record record = records.get(holder.getAdapterPosition());
+        Log.d(TAG, "inflating: " + record.toString());
         holder.llCard.setVisibility(View.VISIBLE);
         holder.tvEnd.setVisibility(View.GONE);
         holder.tvDuration.setText(Utils.generateDurationString(record));
@@ -114,7 +172,6 @@ public class HistoryFragment extends Fragment {
 
     @Override
     public int getItemCount() {
-      //TODO get db
       if (records == null)
         return 1;             //The nothing card
       else
