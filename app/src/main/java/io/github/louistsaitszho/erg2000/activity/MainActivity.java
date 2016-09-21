@@ -1,10 +1,11 @@
-package io.github.louistsaitszho.erg2000;
+package io.github.louistsaitszho.erg2000.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -22,19 +24,23 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.louistsaitszho.erg2000.Consts;
+import io.github.louistsaitszho.erg2000.interfaces.HideFAB;
+import io.github.louistsaitszho.erg2000.R;
+import io.github.louistsaitszho.erg2000.SearchParams;
 import io.github.louistsaitszho.erg2000.fragment.HistoryFragment;
 import io.github.louistsaitszho.erg2000.fragment.SearchFragment;
 import io.github.louistsaitszho.erg2000.fragment.StatisticFragment;
 
-public class MainActivity extends AppCompatActivity implements HideFAB{
+public class MainActivity extends AppCompatActivity implements HideFAB {
 
   public static final String TAG = MainActivity.class.getSimpleName();
 
-  @BindView(R.id.toolbar) Toolbar toolbar;
-  @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
-  @BindView(R.id.bottom_navigation) AHBottomNavigation bottomNavigation;
-  @BindView(R.id.fragment_container) FrameLayout fragmentContainer;
-  @BindView(R.id.fab) FloatingActionButton floatingActionButton;
+  @BindView(R.id.toolbar)             Toolbar toolbar;
+  @BindView(R.id.coordinatorLayout)   CoordinatorLayout coordinatorLayout;
+  @BindView(R.id.bottom_navigation)   AHBottomNavigation bottomNavigation;
+  @BindView(R.id.fragment_container)  FrameLayout fragmentContainer;
+  @BindView(R.id.fab)                 FloatingActionButton floatingActionButton;
 
   HistoryFragment historyFragment;
   SearchFragment searchFragment;
@@ -47,6 +53,12 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
     setSupportActionBar(toolbar);
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      getSupportActionBar().setDisplayShowHomeEnabled(true);
+      getSupportActionBar().setIcon(R.drawable.actionbar_icon);
+      getSupportActionBar().setTitle(R.string.history);
+    }
 
     inflateBottomNavigationBar();
     floatingActionButton.setImageDrawable(new IconicsDrawable(this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus).sizeDp(12));
@@ -70,13 +82,15 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
   }
 
   private void inflateBottomNavigationBar() {
-    AHBottomNavigationItem ahbniHistory = new AHBottomNavigationItem("History", new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_history));
-    AHBottomNavigationItem ahbniSearch = new AHBottomNavigationItem("Search", new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_magnify));
-    AHBottomNavigationItem ahbniStatistics = new AHBottomNavigationItem("Statistics", new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_chart_line));
+    AHBottomNavigationItem ahbniHistory = new AHBottomNavigationItem(getString(R.string.history), new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_history));
+    AHBottomNavigationItem ahbniSearch = new AHBottomNavigationItem(getString(R.string.search), new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_magnify));
+    AHBottomNavigationItem ahbniStatistics = new AHBottomNavigationItem(getString(R.string.statistics), new IconicsDrawable(this).sizeDp(22).icon(CommunityMaterial.Icon.cmd_chart_line));
 
     bottomNavigation.addItem(ahbniHistory);
     bottomNavigation.addItem(ahbniSearch);
     bottomNavigation.addItem(ahbniStatistics);
+
+    bottomNavigation.setBehaviorTranslationEnabled(true);
 
     bottomNavigation.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
 
@@ -92,8 +106,15 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
               if (historyFragment == null)
                 historyFragment = HistoryFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, historyFragment).addToBackStack(null).commit();
+              getSupportActionBar().setTitle(R.string.history);
               floatingActionButton.setVisibility(View.VISIBLE);
               floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_plus));
+              floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  openAddRecordActivity();
+                }
+              });
             }
             break;
           case Consts.FRAGMENT_SEARCH:
@@ -103,8 +124,19 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
               if (searchFragment == null)
                 searchFragment = SearchFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).addToBackStack(null).commit();
+              getSupportActionBar().setTitle(R.string.search);
               floatingActionButton.setVisibility(View.VISIBLE);
               floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_magnify));
+              floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  Log.d(TAG, "fab at search");
+                  if (searchFragment != null) {
+                    SearchParams searchParams = searchFragment.getSearchParams();
+                    openSearchResultActivity(searchParams);
+                  }
+                }
+              });
             }
             break;
           case Consts.FRAGMENT_STATISTIC:
@@ -114,8 +146,17 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
               if (statisticFragment == null)
                 statisticFragment = StatisticFragment.newInstance();
               getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, statisticFragment).addToBackStack(null).commit();
+              getSupportActionBar().setTitle(R.string.statistics);
               floatingActionButton.setVisibility(View.VISIBLE);
               floatingActionButton.setImageDrawable(new IconicsDrawable(MainActivity.this).colorRes(R.color.colorPrimary).icon(CommunityMaterial.Icon.cmd_filter));
+              floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  Log.d(TAG, "fab at statistics");
+                  //TODO
+                  Toast.makeText(MainActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+                }
+              });
             }
             break;
         }
@@ -161,6 +202,11 @@ public class MainActivity extends AppCompatActivity implements HideFAB{
   private void openAddRecordActivity() {
     Intent intent = new Intent(this, AddRecordActivity.class);
     startActivity(intent);
+  }
+
+  private void openSearchResultActivity(SearchParams searchParams) {
+    //TODO
+    Toast.makeText(MainActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
   }
 
   @Override

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="io.github.louistsaitszho.erg2000.AddRecordActivity"
+    tools:context="io.github.louistsaitszho.erg2000.activity.AddRecordActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.AppBarLayout

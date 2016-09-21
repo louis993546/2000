@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/dialog_detailed_record"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="4dp">
+
+        <Button
+            android:id="@+id/bRest"
+            android:text="+ Rest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/bRow"
+            android:text="+ Row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/ivEventDescription"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/actvEventDescription"
+            android:layout_toRightOf="@id/ivEventDescription"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add event description"
+            android:background="@drawable/md_transparent"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerGray"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/ivStartDateTime"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tvStartDateTime"
+            android:layout_toRightOf="@id/ivStartDateTime"
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="Add start time"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            style="@style/TextAppearance.AppCompat.Medium"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerGray"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/ivTags"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <mabbas007.tagsedittext.TagsEditText
+            android:id="@+id/etTags"
+            android:layout_toRightOf="@id/ivTags"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add tag(s)"
+            app:allowSpaceInTag="true"
+            app:tagsBackground="@drawable/tags_background"
+            app:tagsCloseImageRight="@drawable/ic_action_cross"
+            android:background="@drawable/md_transparent"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerGray"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/ivRemark"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <EditText
+            android:id="@+id/etRemark"
+            android:layout_toRightOf="@id/ivRemark"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add remark"
+            android:background="@drawable/md_transparent"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerGray"/>
+
+    <RelativeLayout
+        android:id="@+id/rlImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <ImageView
+            android:id="@+id/ivImages"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp"
+            android:src="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tvImages"
+            android:layout_toRightOf="@id/ivImages"
+            android:layout_marginLeft="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:hint="Images (0)"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            style="@style/TextAppearance.AppCompat.Medium"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerGray"/>
+
+</LinearLayout>

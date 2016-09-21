@@ -1,9 +1,8 @@
-package io.github.louistsaitszho.erg2000.realmObject;
+package io.github.louistsaitszho.erg2000.realm.realmObject;
 
 import java.io.Serializable;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**

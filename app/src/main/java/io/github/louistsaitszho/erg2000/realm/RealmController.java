@@ -1,13 +1,16 @@
-package io.github.louistsaitszho.erg2000;
+package io.github.louistsaitszho.erg2000.realm;
 
 import android.app.Activity;
 import android.app.Application;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.SparseArray;
 
 import java.util.List;
 
-import io.github.louistsaitszho.erg2000.realmObject.Record;
-import io.github.louistsaitszho.erg2000.realmObject.Tag;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Tag;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -52,14 +55,15 @@ public class RealmController {
   }
 
   /**
-   * Get every records
-   * @return
+   * @return every records
    */
   public RealmResults<Record> allRecords() {
     return realm.where(Record.class).findAll();
   }
 
-  //TODO add records and tags
+  public void addRecord(long startDateTime, @Nullable String remark, long totalDistance, long totalDuration, long averageRating, String eventDescription, List<String> tags, SparseArray<Row> rowSparseArray) {
+    //TODO add records and tags
+  }
 
   /**
    * Get every tags
@@ -71,8 +75,8 @@ public class RealmController {
 
   /**
    * Get records that contains the list of tags
-   * @param tags
-   * @return
+   * @param tags in a List
+   * @return every record with those tags
    */
   public RealmResults<Record> recordsWithTags(List<Tag> tags) {
     RealmQuery<Record> query = realm.where(Record.class);

@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.Utils;
-import io.github.louistsaitszho.erg2000.realmObject.Row;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
 
 /**
  * The input dialog for adding/editing/deleting a row of rowing/rest record
@@ -49,7 +49,7 @@ public class NewRowOrRestDialogFragment extends DialogFragment {
   @BindView(R.id.tvRating)      TextView tvRating;
   @BindView(R.id.npvRating)     NumberPickerView npvRating;
 
-  DialogListener listener;
+  NewRowOrRestDialogFragmentListener listener;
 
   public NewRowOrRestDialogFragment() {
 
@@ -87,8 +87,8 @@ public class NewRowOrRestDialogFragment extends DialogFragment {
   @Override
   public void onAttach(Context context) {
     super.onAttach(context);
-    if (context instanceof DialogListener)
-      listener = (DialogListener) context;
+    if (context instanceof NewRowOrRestDialogFragmentListener)
+      listener = (NewRowOrRestDialogFragmentListener) context;
   }
 
   @Override
@@ -229,7 +229,7 @@ public class NewRowOrRestDialogFragment extends DialogFragment {
       });
     }  }
 
-  public interface DialogListener {
+  public interface NewRowOrRestDialogFragmentListener {
     void onAddRow(Row row);
     void onEditRow(Row oldRow, Row newRow);
     void onCancel();

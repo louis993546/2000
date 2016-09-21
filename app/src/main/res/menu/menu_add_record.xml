@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_fix_totals"
         android:orderInCategory="100"
-        android:title="Fix totals"
+        android:title="@string/fix_totals"
         app:showAsAction="never"
         android:checkable="true"/>
 

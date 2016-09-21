@@ -1,4 +1,4 @@
-package io.github.louistsaitszho.erg2000;
+package io.github.louistsaitszho.erg2000.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,11 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -38,23 +36,24 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.louistsaitszho.erg2000.R;
+import io.github.louistsaitszho.erg2000.Utils;
+import io.github.louistsaitszho.erg2000.adapter.ItemRowRowAdapter;
 import io.github.louistsaitszho.erg2000.fragment.NewRowOrRestDialogFragment;
-import io.github.louistsaitszho.erg2000.realmObject.Record;
-import io.github.louistsaitszho.erg2000.realmObject.Row;
-import io.github.louistsaitszho.erg2000.realmObject.Tag;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Tag;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import mabbas007.tagsedittext.TagsEditText;
 
-public class AddRecordActivity extends AppCompatActivity implements NewRowOrRestDialogFragment.DialogListener{
+public class AddRecordActivity extends AppCompatActivity implements NewRowOrRestDialogFragment.NewRowOrRestDialogFragmentListener {
   public static final String TAG = AddRecordActivity.class.getSimpleName();
 
-  SparseArray<Row> rowSparseArray;
   long startDateTime;               //Include time zone
   List<String> tagsString;
 
@@ -87,7 +86,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
   
   @BindView(R.id.fab)                   FloatingActionButton floatingActionButton;
 
-  RVA recyclerViewAdapter;
+  ItemRowRowAdapter recyclerViewAdapter;
   ArrayAdapter eventDescriptionAdapter;
   ArrayAdapter tagsAdapter;
 
@@ -129,9 +128,9 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
     });
 
     //TODO getExtra (edit record)
-    rowSparseArray = new SparseArray<>();
+    recyclerViewAdapter = new ItemRowRowAdapter();
+    recyclerViewAdapter.setRowSparseArray(new SparseArray<Row>());
     recyclerView.setLayoutManager(new LinearLayoutManager(AddRecordActivity.this, LinearLayoutManager.VERTICAL, false));
-    recyclerViewAdapter = new RVA();
     recyclerView.setAdapter(recyclerViewAdapter);
 
     RealmResults<Tag> tags = Realm.getDefaultInstance().where(Tag.class).findAll();
@@ -230,15 +229,15 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
           tvStartDateTime.setError(null);
         }
 
-        if (rowSparseArray.size() <= 0) {
+        if (recyclerViewAdapter.getRowSparseArray().size() <= 0) {
           anyError = true;
           Log.d(TAG, "no records");
           //TODO tell user
         } else {
           boolean valid = false;
           int currentPosition = 0;
-          while (!valid && currentPosition < rowSparseArray.size()) {
-            if (!rowSparseArray.get(currentPosition).isEasy())
+          while (!valid && currentPosition < recyclerViewAdapter.getRowSparseArray().size()) {
+            if (!recyclerViewAdapter.getRowSparseArray().get(currentPosition).isEasy())
               valid = true;
             currentPosition++;
           }
@@ -257,6 +256,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
               .content("Just a sec...")
               .progress(true, 0)
               .show();
+          //TODO call Controller.addRecord
           Realm realm = Realm.getDefaultInstance();
           realm.beginTransaction();
           Record newRecord = realm.createObject(Record.class);
@@ -277,10 +277,10 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
             }
           }
 
-          for(int i = 0; i < rowSparseArray.size(); i++) {
+          for(int i = 0; i < recyclerViewAdapter.getRowSparseArray().size(); i++) {
             Row newRow = realm.createObject(Row.class);
-            int key = rowSparseArray.keyAt(i);
-            Row r = rowSparseArray.get(key);
+            int key = recyclerViewAdapter.getRowSparseArray().keyAt(i);
+            Row r = recyclerViewAdapter.getRowSparseArray().get(key);
             newRow.setEasy(r.isEasy());
             newRow.setDistance(r.getDistance());
             newRow.setDuration(r.getDuration());
@@ -345,9 +345,9 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
     long totalStrokes = 0;
     totalDistance = 0;
     totalDuration = 0;
-    for(int i = 0; i < rowSparseArray.size(); i++) {
-      int key = rowSparseArray.keyAt(i);
-      Row r = rowSparseArray.get(key);
+    for(int i = 0; i < recyclerViewAdapter.getRowSparseArray().size(); i++) {
+      int key = recyclerViewAdapter.getRowSparseArray().keyAt(i);
+      Row r = recyclerViewAdapter.getRowSparseArray().get(key);
       if (!r.isEasy()) {
         totalDistance += r.getDistance();
         totalDuration += r.getDuration();
@@ -373,8 +373,8 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
   @Override
   public void onAddRow(Row row) {
     Log.d(TAG, "onAddRow: " + row.toString());
-    row.setOrder(rowSparseArray.size());
-    rowSparseArray.put(row.getOrderInt(), row);
+    row.setOrder(recyclerViewAdapter.getRowSparseArray().size());
+    recyclerViewAdapter.putToRowSparseArray(row.getOrderInt(), row);
     if (!fixTotals)
       calculateNewAverages();
     recyclerViewAdapter.notifyDataSetChanged();
@@ -383,7 +383,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
   @Override
   public void onEditRow(Row oldRow, Row newRow) {
     Log.d(TAG, "onEditRow;");
-    rowSparseArray.put(oldRow.getOrderInt(), newRow);
+    recyclerViewAdapter.putToRowSparseArray(oldRow.getOrderInt(), newRow);
     if (!fixTotals)
       calculateNewAverages();
     recyclerViewAdapter.notifyDataSetChanged();
@@ -397,55 +397,10 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
   @Override
   public void onDelete(Row row) {
     Log.d(TAG, "onDelete;");
-    rowSparseArray.remove(row.getOrderInt());
+    recyclerViewAdapter.removeFromRowSparseArray(row.getOrderInt());
     if (!fixTotals)
       calculateNewAverages();
     recyclerViewAdapter.notifyDataSetChanged();
-  }
-
-  public class RVVH extends RecyclerView.ViewHolder {
-    @BindView(R.id.tvTime)    TextView tvTime;
-    @BindView(R.id.tvMeter)   TextView tvMeter;
-    @BindView(R.id.tvPace)    TextView tvPace;
-    @BindView(R.id.tvRating)  TextView tvRating;
-
-    public RVVH(View itemView) {
-      super(itemView);
-      ButterKnife.bind(this, itemView);
-    }
-  }
-
-  public class RVA extends RecyclerView.Adapter<RVVH> {
-
-    public RVA() {
-    }
-
-    @Override
-    public RVVH onCreateViewHolder(ViewGroup parent, int viewType) {
-      return new RVVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_row, parent, false));
-    }
-
-    @Override
-    public void onBindViewHolder(RVVH holder, int position) {
-      Log.d(TAG, "binding: " + position);
-      Row row = rowSparseArray.get(holder.getAdapterPosition());
-
-      holder.tvTime.setText(Utils.generateDurationString(row));
-      ArrayList<Long> previousDistances = new ArrayList<>();
-      for (int i = holder.getAdapterPosition()-1; i >= 0; i--) {
-        previousDistances.add(rowSparseArray.get(i).getDistance());
-      }
-      holder.tvMeter.setText(Utils.generateDistanceString(row.getDistance(), previousDistances));
-      if (!row.isEasy()) {
-        holder.tvPace.setText(Utils.generatePaceString(row));
-        holder.tvRating.setText(String.valueOf(row.getRating()));
-      }
-    }
-
-    @Override
-    public int getItemCount() {
-      return rowSparseArray.size();
-    }
   }
 
 }

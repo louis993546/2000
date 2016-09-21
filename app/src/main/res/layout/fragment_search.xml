@@ -1,64 +1,120 @@
-<RelativeLayout
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/nestedScrollView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="io.github.louistsaitszho.erg2000.fragment.SearchFragment">
+    tools:context="io.github.louistsaitszho.erg2000.fragment.SearchFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cvNoRecords"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:layout_margin="16dp"
-        app:elevation="2dp"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvNoRecords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_margin="16dp"
+            app:elevation="2dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvNoRecords"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:gravity="center_horizontal"
+                android:text="@string/search_no_records"/>
+
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/llFilters"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:gravity="center_horizontal"
-            android:text="@string/search_no_records"/>
+            android:orientation="vertical"
+            android:layout_margin="16dp">
 
-    </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/distance_with_unit"
+                android:layout_margin="6dp"/>
 
-    <LinearLayout
-        android:id="@+id/llFilters"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+            <com.appyvet.rangebar.RangeBar
+                android:id="@+id/rbDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.appyvet.rangebar.RangeBar
-            android:id="@+id/rbDistance"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rating_with_unit"
+                android:layout_margin="6dp"/>
 
-        <com.appyvet.rangebar.RangeBar
-            android:id="@+id/rbRating"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            <com.appyvet.rangebar.RangeBar
+                android:id="@+id/rbRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.appyvet.rangebar.RangeBar
-            android:id="@+id/rbDuration"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:layout_margin="6dp"/>
 
-        <com.appyvet.rangebar.RangeBar
-            android:id="@+id/rbStartDate"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            <com.appyvet.rangebar.RangeBar
+                android:id="@+id/rbDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date"
+                android:layout_margin="6dp"/>
 
+            <com.appyvet.rangebar.RangeBar
+                android:id="@+id/rbStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/remark"
+                android:layout_margin="6dp"/>
+
+            <EditText
+                android:id="@+id/etRemark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contains Image"
+                    android:layout_margin="6dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

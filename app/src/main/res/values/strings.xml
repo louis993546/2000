@@ -1,10 +1,17 @@
 <resources>
     <string name="app_name">2000</string>
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_records">No records! Add now!</string>
     <string name="end_of_list">End of list</string>
     <string name="search_no_records">You have no records to search for!</string>
+    <string name="search_one_record">You only have 1 record. Just click that!</string>
+    <string name="remark">Remark</string>
+    <string name="start_date">Start Date</string>
+    <string name="duration">Duration</string>
+    <string name="rating_with_unit">Rating (s/m)</string>
+    <string name="distance_with_unit">Distance (m)</string>
+    <string name="history">History</string>
+    <string name="search">Search</string>
+    <string name="statistics">Statistics</string>
+    <string name="fix_totals">Fix totals</string>
 </resources>

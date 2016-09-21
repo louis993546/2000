@@ -10,20 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.db.chart.Tools;
 import com.db.chart.model.LineSet;
-import com.db.chart.model.Point;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.LineChartView;
-import com.db.chart.view.animation.Animation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
-import io.github.louistsaitszho.erg2000.ScrollToTop;
+import io.github.louistsaitszho.erg2000.interfaces.ScrollToTop;
 
 public class StatisticFragment extends Fragment implements ScrollToTop{
 
@@ -122,6 +120,13 @@ public class StatisticFragment extends Fragment implements ScrollToTop{
           .setBorderSpacing(Tools.fromDpToPx(5));
       mChart.show();
       holder.flContainer.addView(mChart);
+      holder.flContainer.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          //TODO
+          Toast.makeText(getContext(), "Coming soon!", Toast.LENGTH_LONG).show();
+        }
+      });
     }
 
     @Override

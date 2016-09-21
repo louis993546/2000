@@ -5,8 +5,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.github.louistsaitszho.erg2000.realmObject.Record;
-import io.github.louistsaitszho.erg2000.realmObject.Row;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
 
 /**
  * Utilities
