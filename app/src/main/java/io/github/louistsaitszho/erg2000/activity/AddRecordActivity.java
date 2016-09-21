@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -34,9 +35,9 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +45,7 @@ import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.Utils;
 import io.github.louistsaitszho.erg2000.adapter.ItemRowRowAdapter;
 import io.github.louistsaitszho.erg2000.fragment.NewRowOrRestDialogFragment;
-import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
+import io.github.louistsaitszho.erg2000.realm.RealmController;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Tag;
 import io.realm.Realm;
@@ -168,12 +169,12 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
                         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth, hourOfDay, minute);
                         startDateTime = calendar.getTimeInMillis();
                         if (DateFormat.is24HourFormat(AddRecordActivity.this)) {
-                          tvStartDateTime.setText(String.format("%d/%d/%d %d:%d", year, monthOfYear + 1, dayOfMonth, hourOfDay, minute));
+                          tvStartDateTime.setText(String.format(Locale.getDefault(), "%d/%d/%d %d:%d", year, monthOfYear + 1, dayOfMonth, hourOfDay, minute));
                         } else {
                           if (hourOfDay >= 12)
-                            tvStartDateTime.setText(String.format("%d/%d/%d %d:%d PM", year, monthOfYear + 1, dayOfMonth, hourOfDay - 12, minute));
+                            tvStartDateTime.setText(String.format(Locale.getDefault(), "%d/%d/%d %d:%d PM", year, monthOfYear + 1, dayOfMonth, hourOfDay - 12, minute));
                           else
-                            tvStartDateTime.setText(String.format("%d/%d/%d %d:%d AM", year, monthOfYear + 1, dayOfMonth, hourOfDay - 12, minute));
+                            tvStartDateTime.setText(String.format(Locale.getDefault(), "%d/%d/%d %d:%d AM", year, monthOfYear + 1, dayOfMonth, hourOfDay - 12, minute));
                         }
                       }
                     },
@@ -243,55 +244,19 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
           }
           if (!valid) {
             Log.d(TAG, "no row is row");
-            //TODO tell user
+            Toast.makeText(AddRecordActivity.this, "None of the rows are 'Row'", Toast.LENGTH_SHORT);   //TODO ditch toast
             anyError = true;
           }
         }
 
         if (!anyError) {
           Log.d(TAG, "can save");
-          //TODO progress bar
           MaterialDialog progressDialog = new MaterialDialog.Builder(AddRecordActivity.this)
               .title("Adding...")
               .content("Just a sec...")
               .progress(true, 0)
               .show();
-          //TODO call Controller.addRecord
-          Realm realm = Realm.getDefaultInstance();
-          realm.beginTransaction();
-          Record newRecord = realm.createObject(Record.class);
-          newRecord.setStartDateTime(new Date(startDateTime));
-          if (etRemark.getText() != null)
-            newRecord.setRemark(etRemark.getText().toString());
-          newRecord.setTotalDistance(totalDistance);
-          newRecord.setTotalDuration(totalDuration);
-          newRecord.setAverageRating(averageRating);
-          if (actvEventDescription.getText() != null)
-            newRecord.setEvent(actvEventDescription.getText().toString());
-
-          if (tagsString != null && tagsString.size() > 0) {
-            for (String tag:tagsString) {
-              Tag newTag = realm.createObject(Tag.class);
-              newTag.setTag(tag);
-              newRecord.tags.add(newTag);
-            }
-          }
-
-          for(int i = 0; i < recyclerViewAdapter.getRowSparseArray().size(); i++) {
-            Row newRow = realm.createObject(Row.class);
-            int key = recyclerViewAdapter.getRowSparseArray().keyAt(i);
-            Row r = recyclerViewAdapter.getRowSparseArray().get(key);
-            newRow.setEasy(r.isEasy());
-            newRow.setDistance(r.getDistance());
-            newRow.setDuration(r.getDuration());
-            newRow.setOrder(r.getOrder());
-            newRow.setRating(r.getRating());
-            newRecord.rows.add(newRow);
-          }
-
-//          newRecord.images.add();
-
-          realm.commitTransaction();
+          RealmController.with(AddRecordActivity.this).addRecord(startDateTime, etRemark.getText(), totalDistance, totalDuration, averageRating, actvEventDescription.getText(), tagsString, recyclerViewAdapter.getRowSparseArray());
           progressDialog.dismiss();
           AddRecordActivity.this.finish();
         }

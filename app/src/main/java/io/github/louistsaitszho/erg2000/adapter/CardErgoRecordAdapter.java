@@ -32,8 +32,8 @@ public class CardErgoRecordAdapter extends RealmRecyclerViewAdapter<Record, Card
 
   boolean pressing = false;
 
-  public CardErgoRecordAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Record> data, boolean autoUpdate) {
-    super(context, data, autoUpdate);
+  public CardErgoRecordAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<Record> data) {
+    super(context, data, true);
   }
 
   @Override

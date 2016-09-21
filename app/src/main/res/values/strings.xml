@@ -1,17 +1,47 @@
 <resources>
     <string name="app_name">2000</string>
     <string name="action_settings">Settings</string>
+
     <string name="no_records">No records! Add now!</string>
     <string name="end_of_list">End of list</string>
     <string name="search_no_records">You have no records to search for!</string>
     <string name="search_one_record">You only have 1 record. Just click that!</string>
+
     <string name="remark">Remark</string>
     <string name="start_date">Start Date</string>
     <string name="duration">Duration</string>
+
+    <string name="rating">Rating</string>
     <string name="rating_with_unit">Rating (s/m)</string>
+
+    <string name="distance">Distance</string>
     <string name="distance_with_unit">Distance (m)</string>
+
     <string name="history">History</string>
     <string name="search">Search</string>
     <string name="statistics">Statistics</string>
+
     <string name="fix_totals">Fix totals</string>
+    <string name="time">time</string>
+    <string name="meter">meter</string>
+    <string name="per500m">/500m</string>
+    <string name="s_per_m">s/m</string>
+
+    <string name="contains_image">Contains Image</string>
+
+    <string name="unit_m">m</string>
+    <string name="unit_second">s</string>
+    <string name="unit_hour">h</string>
+
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="seconds">Seconds</string>
+
+    <string name="add_rest">+ Rest</string>
+    <string name="add_row">+ Row</string>
+
+    <string name="add_event_description">Add event description</string>
+    <string name="add_start_time">Add start time</string>
+    <string name="add_tag_s">Add tag(s)</string>
+    <string name="add_remark">Add remark</string>
 </resources>

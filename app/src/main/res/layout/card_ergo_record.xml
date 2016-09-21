@@ -24,7 +24,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:layout_margin="16dp"
-        android:text="No More items"
+        android:text="@string/end_of_list"
         android:visibility="gone"/>
 
 </android.support.v7.widget.CardView>

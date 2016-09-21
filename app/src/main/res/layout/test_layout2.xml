@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -16,14 +15,14 @@
 
         <Button
             android:id="@+id/bRest"
-            android:text="+ Rest"
+            android:text="@string/add_rest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
         <Button
             android:id="@+id/bRow"
-            android:text="+ Row"
+            android:text="@string/add_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
@@ -55,7 +54,7 @@
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Add event description"
+            android:hint="@string/add_event_description"
             android:background="@drawable/md_transparent"/>
 
     </RelativeLayout>
@@ -85,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:hint="Add start time"
+            android:hint="@string/add_start_time"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             style="@style/TextAppearance.AppCompat.Medium"/>
@@ -117,7 +116,7 @@
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Add tag(s)"
+            android:hint="@string/add_tag_s"
             app:allowSpaceInTag="true"
             app:tagsBackground="@drawable/tags_background"
             app:tagsCloseImageRight="@drawable/ic_action_cross"
@@ -150,7 +149,7 @@
             android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Add remark"
+            android:hint="@string/add_remark"
             android:background="@drawable/md_transparent"/>
 
     </RelativeLayout>

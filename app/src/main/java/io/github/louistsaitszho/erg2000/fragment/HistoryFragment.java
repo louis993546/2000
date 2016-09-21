@@ -43,7 +43,7 @@ public class HistoryFragment extends Fragment implements ScrollToTop {
   public void onResume() {
     super.onResume();
     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-    recyclerViewAdapter = new CardErgoRecordAdapter(getContext(), RealmController.with(this).allRecords().sort("startDateTime", Sort.DESCENDING), true);
+    recyclerViewAdapter = new CardErgoRecordAdapter(getContext(), RealmController.with(this).allRecords().sort("startDateTime", Sort.DESCENDING));
     recyclerView.setAdapter(recyclerViewAdapter);
   }
 

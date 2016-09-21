@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="time"
+            android:text="@string/time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
@@ -21,7 +21,7 @@
             android:gravity="end"/>
 
         <TextView
-            android:text="meter"
+            android:text="@string/meter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="8"
@@ -29,7 +29,7 @@
             android:gravity="end"/>
 
         <TextView
-            android:text="/500m"
+            android:text="@string/per500m"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
@@ -37,7 +37,7 @@
             android:gravity="end"/>
 
         <TextView
-            android:text="s/m"
+            android:text="@string/s_per_m"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"

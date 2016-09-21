@@ -100,7 +100,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Contains Image"
+                    android:text="@string/contains_image"
                     android:layout_margin="6dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"/>

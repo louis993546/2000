@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
+import java.util.Date;
 import java.util.List;
 
 import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
@@ -61,8 +62,47 @@ public class RealmController {
     return realm.where(Record.class).findAll();
   }
 
-  public void addRecord(long startDateTime, @Nullable String remark, long totalDistance, long totalDuration, long averageRating, String eventDescription, List<String> tags, SparseArray<Row> rowSparseArray) {
-    //TODO add records and tags
+  /**
+   *
+   * @param startDateTime
+   * @param remark
+   * @param totalDistance
+   * @param totalDuration
+   * @param averageRating
+   * @param eventDescription
+   * @param tags
+   * @param rowSparseArray
+   */
+  public void addRecord(long startDateTime, @Nullable CharSequence remark, long totalDistance, long totalDuration, long averageRating, @Nullable CharSequence eventDescription, List<String> tags, SparseArray<Row> rowSparseArray) {
+    realm.beginTransaction();
+    Record newRecord = realm.createObject(Record.class);
+    newRecord.setStartDateTime(new Date(startDateTime));
+    if (remark != null)
+      newRecord.setRemark(remark.toString());
+    newRecord.setTotalDistance(totalDistance);
+    newRecord.setTotalDuration(totalDuration);
+    newRecord.setAverageRating(averageRating);
+    if (eventDescription != null)
+      newRecord.setEvent(eventDescription.toString());
+    if (tags != null && tags.size() > 0) {
+      for (String tag:tags) {
+        Tag newTag = realm.createObject(Tag.class);
+        newTag.setTag(tag);
+        newRecord.tags.add(newTag);
+      }
+    }
+    for (int i = 0; i < rowSparseArray.size(); i++) {
+      Row newRow = realm.createObject(Row.class);
+      Row r = rowSparseArray.get(rowSparseArray.keyAt(i));
+      newRow.setEasy(r.isEasy());
+      newRow.setDistance(r.getDistance());
+      newRow.setDuration(r.getDuration());
+      newRow.setOrder(r.getOrder());
+      newRow.setRating(r.getRating());
+      newRecord.rows.add(newRow);
+    }
+    //TODO images
+    realm.commitTransaction();
   }
 
   /**
