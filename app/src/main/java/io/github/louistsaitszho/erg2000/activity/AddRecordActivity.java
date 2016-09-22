@@ -244,7 +244,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
           }
           if (!valid) {
             Log.d(TAG, "no row is row");
-            Toast.makeText(AddRecordActivity.this, "None of the rows are 'Row'", Toast.LENGTH_SHORT);   //TODO ditch toast
+            Toast.makeText(AddRecordActivity.this, "None of the rows are 'Row'", Toast.LENGTH_SHORT).show();   //TODO ditch toast
             anyError = true;
           }
         }

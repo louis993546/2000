@@ -24,6 +24,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.cketti.library.changelog.ChangeLog;
 import io.github.louistsaitszho.erg2000.Consts;
 import io.github.louistsaitszho.erg2000.interfaces.HideFAB;
 import io.github.louistsaitszho.erg2000.R;
@@ -35,6 +36,8 @@ import io.github.louistsaitszho.erg2000.fragment.StatisticFragment;
 public class MainActivity extends AppCompatActivity implements HideFAB {
 
   public static final String TAG = MainActivity.class.getSimpleName();
+
+  ChangeLog cl;
 
   @BindView(R.id.toolbar)             Toolbar toolbar;
   @BindView(R.id.coordinatorLayout)   CoordinatorLayout coordinatorLayout;
@@ -52,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
+
+    //TODO replace it with changeloglib
+    cl = new ChangeLog(this);
+
     setSupportActionBar(toolbar);
     ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
@@ -154,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
                 public void onClick(View view) {
                   Log.d(TAG, "fab at statistics");
                   //TODO
-                  Toast.makeText(MainActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+                  Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_LONG).show();
                 }
               });
             }
@@ -175,11 +182,13 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_settings:
+        Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
         break;
       case R.id.action_about:
         openAboutActivity();
         break;
       case R.id.action_changelog:
+        cl.getLogDialog().show();
         break;
     }
     return super.onOptionsItemSelected(item);
@@ -206,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
 
   private void openSearchResultActivity(SearchParams searchParams) {
     //TODO
-    Toast.makeText(MainActivity.this, "Coming soon!", Toast.LENGTH_LONG).show();
+    Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_LONG).show();
   }
 
   @Override

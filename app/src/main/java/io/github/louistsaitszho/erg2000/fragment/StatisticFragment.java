@@ -99,7 +99,7 @@ public class StatisticFragment extends Fragment implements ScrollToTop{
 
     @Override
     public void onBindViewHolder(RVVH holder, int position) {
-      holder.tvTitle.setText("Best 500m");
+      holder.tvTitle.setText(R.string.coming_soon);
 
       LineChartView mChart = new LineChartView(getContext());
       final String[] mLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"};
@@ -124,7 +124,7 @@ public class StatisticFragment extends Fragment implements ScrollToTop{
         @Override
         public void onClick(View view) {
           //TODO
-          Toast.makeText(getContext(), "Coming soon!", Toast.LENGTH_LONG).show();
+          Toast.makeText(getContext(), R.string.coming_soon, Toast.LENGTH_LONG).show();
         }
       });
     }
@@ -133,7 +133,7 @@ public class StatisticFragment extends Fragment implements ScrollToTop{
     public int getItemCount() {
       //TODO get sharepreference
       //TODO an extra bottom one (end of page + avoid things hide underneath fab)
-      return 3;
+      return 2;
     }
   }
 
