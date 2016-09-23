@@ -1,5 +1,6 @@
 #2000
 ##Easier way to keep track of your indoor rowing results (Currently in Alpha)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/2000/localized.svg)](https://crowdin.com/project/2000)
 
 <a href='https://play.google.com/store/apps/details?id=io.github.louistsaitszho.erg2000&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
@@ -18,7 +19,7 @@ Are you tired of all the general purpose fitness apps not being able to keep tra
 ### Licence
 	MIT License
 
-	Copyright (c) [year] [fullname]
+	Copyright (c) 2016 Louis Tsai Tsz Ho
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
