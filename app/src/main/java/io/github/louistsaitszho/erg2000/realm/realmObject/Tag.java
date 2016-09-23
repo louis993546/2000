@@ -3,6 +3,7 @@ package io.github.louistsaitszho.erg2000.realm.realmObject;
 import java.io.Serializable;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**
@@ -11,20 +12,20 @@ import io.realm.annotations.Required;
  */
 
 public class Tag extends RealmObject implements Serializable{
-//  @Required @PrimaryKey String id;
+  @PrimaryKey String id;
   @Required String tag;
 
   public Tag() {
 
   }
 
-//  public String getId() {
-//    return id;
-//  }
-//
-//  public void setId(String id) {
-//    this.id = id;
-//  }
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getTag() {
     return tag;
@@ -37,7 +38,8 @@ public class Tag extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Tag{" +
-        "tag='" + tag + '\'' +
+        "id='" + id + '\'' +
+        ", tag='" + tag + '\'' +
         '}';
   }
 }

@@ -1,6 +1,7 @@
 package io.github.louistsaitszho.erg2000;
 
 import android.app.Application;
+
 import com.squareup.leakcanary.LeakCanary;
 
 import io.realm.Realm;
@@ -18,7 +19,8 @@ public class application extends Application {
     LeakCanary.install(this);
 
     RealmConfiguration configuration = new RealmConfiguration.Builder(this)
-        .schemaVersion(1)
+        .schemaVersion(2)
+        .deleteRealmIfMigrationNeeded()
         .build();
     Realm.setDefaultConfiguration(configuration);
   }

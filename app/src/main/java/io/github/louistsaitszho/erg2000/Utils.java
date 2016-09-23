@@ -2,7 +2,11 @@ package io.github.louistsaitszho.erg2000;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
@@ -101,6 +105,13 @@ public class Utils {
     return String.valueOf(theDistance) + "|" + String.valueOf(previously);
   }
 
+  public static String generateStartDateTimeString(Date date, Locale locale) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy/M/d kk:mm", locale);
+    return simpleDateFormat.format(date);
+  }
+
+  //TODO calculate just now/s/m/h/d/months/y ago
+
   public static long hmsdToLong(int h, int m, int s, int d) {
     return TimeUnit.HOURS.toMillis(h) + TimeUnit.MINUTES.toMillis(m) + TimeUnit.SECONDS.toMillis(s) + d*100;
   }
@@ -116,6 +127,40 @@ public class Utils {
       output[i] = String.valueOf(i);
     }
     return output;
+  }
+
+  public static String randomString(int length) {
+    return new RandomString(length).nextString();
+  }
+
+  public static class RandomString {
+
+    private static final char[] symbols;
+
+    static {
+      StringBuilder tmp = new StringBuilder();
+      for (char ch = '0'; ch <= '9'; ++ch)
+        tmp.append(ch);
+      for (char ch = 'a'; ch <= 'z'; ++ch)
+        tmp.append(ch);
+      symbols = tmp.toString().toCharArray();
+    }
+
+    private final Random random = new Random();
+
+    private final char[] buf;
+
+    public RandomString(int length) {
+      if (length < 1)
+        throw new IllegalArgumentException("length < 1: " + length);
+      buf = new char[length];
+    }
+
+    public String nextString() {
+      for (int idx = 0; idx < buf.length; ++idx)
+        buf[idx] = symbols[random.nextInt(symbols.length)];
+      return new String(buf);
+    }
   }
 
   /**

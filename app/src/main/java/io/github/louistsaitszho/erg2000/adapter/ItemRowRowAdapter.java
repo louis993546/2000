@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.Utils;
+import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
 import io.github.louistsaitszho.erg2000.viewholder.ItemRowRowViewHolder;
 
@@ -21,6 +23,21 @@ public class ItemRowRowAdapter extends RecyclerView.Adapter<ItemRowRowViewHolder
   public final static String TAG = ItemRowRowAdapter.class.getSimpleName();
 
   SparseArray<Row> rowSparseArray;
+
+  public ItemRowRowAdapter(SparseArray<Row> rowSparseArray) {
+    this.rowSparseArray = rowSparseArray;
+  }
+
+  public ItemRowRowAdapter(List<Row> rows) {
+    this.rowSparseArray = new SparseArray<>(rows.size());
+    for (Row r:rows) {
+      this.rowSparseArray.put(r.getOrderInt(), r);
+    }
+  }
+
+  public ItemRowRowAdapter(Record record) {
+    this(record.getRows());
+  }
 
   @Override
   public ItemRowRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

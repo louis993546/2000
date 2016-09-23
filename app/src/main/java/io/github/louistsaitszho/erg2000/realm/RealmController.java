@@ -9,6 +9,8 @@ import android.util.SparseArray;
 import java.util.Date;
 import java.util.List;
 
+import io.github.louistsaitszho.erg2000.Consts;
+import io.github.louistsaitszho.erg2000.Utils;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Record;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Row;
 import io.github.louistsaitszho.erg2000.realm.realmObject.Tag;
@@ -62,6 +64,9 @@ public class RealmController {
     return realm.where(Record.class).findAll();
   }
 
+  public RealmResults<Record> aRecord(String pk) {
+    return realm.where(Record.class).contains("id", pk).findAll();
+  }
   /**
    *
    * @param startDateTime
@@ -76,6 +81,7 @@ public class RealmController {
   public void addRecord(long startDateTime, @Nullable CharSequence remark, long totalDistance, long totalDuration, long averageRating, @Nullable CharSequence eventDescription, List<String> tags, SparseArray<Row> rowSparseArray) {
     realm.beginTransaction();
     Record newRecord = realm.createObject(Record.class);
+    newRecord.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
     newRecord.setStartDateTime(new Date(startDateTime));
     if (remark != null)
       newRecord.setRemark(remark.toString());
@@ -87,12 +93,14 @@ public class RealmController {
     if (tags != null && tags.size() > 0) {
       for (String tag:tags) {
         Tag newTag = realm.createObject(Tag.class);
+        newTag.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
         newTag.setTag(tag);
         newRecord.tags.add(newTag);
       }
     }
     for (int i = 0; i < rowSparseArray.size(); i++) {
       Row newRow = realm.createObject(Row.class);
+      newRow.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
       Row r = rowSparseArray.get(rowSparseArray.keyAt(i));
       newRow.setEasy(r.isEasy());
       newRow.setDistance(r.getDistance());

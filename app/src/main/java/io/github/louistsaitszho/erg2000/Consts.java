@@ -15,4 +15,6 @@ public class Consts {
   public final static int MS_IN_HOUR = 60 * MS_IN_MINUTE;
 
   public final static int DP_ADD_RECORD_ICON = 18;
+  public static final int LENGTH_PRIMARY_KEY = 16;
+  public static final String EXTRA_RECORD_ID = "I_wish_realm_can_do_serializable_correctly";
 }

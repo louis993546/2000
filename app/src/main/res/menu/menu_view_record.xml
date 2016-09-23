@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="io.github.louistsaitszho.erg2000.activity.ViewRecordActivity">
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="Edit"
+        app:showAsAction="ifRoom"/>
+</menu>

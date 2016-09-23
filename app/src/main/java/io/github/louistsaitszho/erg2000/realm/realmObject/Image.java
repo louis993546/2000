@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Because I can't have RealmList of byte array (images)
@@ -11,7 +12,7 @@ import io.realm.RealmObject;
  */
 
 public class Image extends RealmObject implements Serializable{
-//  @Required @PrimaryKey String id;
+  @PrimaryKey String id;
   byte[] image;
   String remark;
 
@@ -19,13 +20,13 @@ public class Image extends RealmObject implements Serializable{
 
   }
 
-//  public String getId() {
-//    return id;
-//  }
-//
-//  public void setId(String id) {
-//    this.id = id;
-//  }
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public byte[] getImage() {
     return image;
@@ -46,7 +47,8 @@ public class Image extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Image{" +
-        "image=" + Arrays.toString(image) +
+        "id='" + id + '\'' +
+        ", image=" + Arrays.toString(image) +
         ", remark='" + remark + '\'' +
         '}';
   }

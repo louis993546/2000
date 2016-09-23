@@ -11,6 +11,8 @@ Are you tired of all the general purpose fitness apps not being able to keep tra
 - Statistics
 - Add tags to records
 - Add images to records
+- Backup to Local/Cloud
+- Restore from Local/Cloud
 
 ###Legal Attribution
 

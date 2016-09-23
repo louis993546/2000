@@ -3,8 +3,11 @@ package io.github.louistsaitszho.erg2000.realm.realmObject;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.github.louistsaitszho.erg2000.Consts;
+import io.github.louistsaitszho.erg2000.Utils;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 /**
@@ -13,6 +16,7 @@ import io.realm.annotations.Required;
  */
 
 public class Record extends RealmObject implements Serializable{
+  @PrimaryKey String id;
   @Required Date startDateTime;
   String event;
   long totalDuration;
@@ -25,6 +29,26 @@ public class Record extends RealmObject implements Serializable{
 
   public Record() {
 
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setTags(RealmList<Tag> tags) {
+    this.tags = tags;
+  }
+
+  public void setRows(RealmList<Row> rows) {
+    this.rows = rows;
+  }
+
+  public void setImages(RealmList<Image> images) {
+    this.images = images;
   }
 
   public Date getStartDateTime() {
@@ -90,15 +114,16 @@ public class Record extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Record{" +
-        "startDateTime=" + startDateTime +
+        "id='" + id + '\'' +
+        ", startDateTime=" + startDateTime +
         ", event='" + event + '\'' +
         ", totalDuration=" + totalDuration +
         ", totalDistance=" + totalDistance +
         ", averageRating=" + averageRating +
         ", remark='" + remark + '\'' +
-        ", tags=" + tags.toString() +
-        ", rows=" + rows.toString() +
-        ", images=" + images.toString() +
+        ", tags=" + tags +
+        ", rows=" + rows +
+        ", images=" + images +
         '}';
   }
 }

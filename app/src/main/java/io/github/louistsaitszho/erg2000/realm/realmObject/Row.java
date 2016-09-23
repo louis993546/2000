@@ -3,13 +3,17 @@ package io.github.louistsaitszho.erg2000.realm.realmObject;
 import java.io.Serializable;
 import java.util.Random;
 
+import io.github.louistsaitszho.erg2000.Consts;
+import io.github.louistsaitszho.erg2000.Utils;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Louis on 24/8/2016.
  */
 
 public class Row extends RealmObject implements Serializable{
+  @PrimaryKey   String id;
   boolean isEasy;                   //is it easy-ing/resting
   long order;                       //Order of this row in its record
   long distance;                    //distance in m
@@ -21,8 +25,7 @@ public class Row extends RealmObject implements Serializable{
   }
 
   public Row(boolean isEasy, long distance, long duration, Long rating) {
-    byte[] r = new byte[8];
-    new Random().nextBytes(r);
+    id = Utils.randomString(Consts.LENGTH_PRIMARY_KEY);
     this.isEasy = isEasy;
     this.distance = distance;
     this.duration = duration;
@@ -31,6 +34,14 @@ public class Row extends RealmObject implements Serializable{
 
   public Row (boolean isEasy, long distance, long duration, int rating) {
     this(isEasy, distance, duration, (long) rating);
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public boolean isEasy() {
@@ -84,7 +95,8 @@ public class Row extends RealmObject implements Serializable{
   @Override
   public String toString() {
     return "Row{" +
-        "isEasy=" + isEasy +
+        "id='" + id + '\'' +
+        ", isEasy=" + isEasy +
         ", order=" + order +
         ", distance=" + distance +
         ", duration=" + duration +

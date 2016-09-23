@@ -129,8 +129,7 @@ public class AddRecordActivity extends AppCompatActivity implements NewRowOrRest
     });
 
     //TODO getExtra (edit record)
-    recyclerViewAdapter = new ItemRowRowAdapter();
-    recyclerViewAdapter.setRowSparseArray(new SparseArray<Row>());
+    recyclerViewAdapter = new ItemRowRowAdapter(new SparseArray<Row>());
     recyclerView.setLayoutManager(new LinearLayoutManager(AddRecordActivity.this, LinearLayoutManager.VERTICAL, false));
     recyclerView.setAdapter(recyclerViewAdapter);
 
