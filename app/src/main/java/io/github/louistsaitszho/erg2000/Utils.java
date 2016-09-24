@@ -212,7 +212,7 @@ public class Utils {
    * "10x500m/:30r"
    *
    * @param rows
-   * @return
+   * @return a list of suggestions
    */
 //  public static List<String> eventDescriptionGenerator(List<Row> rows) {
 //    if (rows == null) {

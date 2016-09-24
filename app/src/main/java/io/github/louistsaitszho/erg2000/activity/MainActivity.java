@@ -1,9 +1,13 @@
 package io.github.louistsaitszho.erg2000.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +19,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.mikepenz.aboutlibraries.Libs;
@@ -26,16 +32,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.cketti.library.changelog.ChangeLog;
 import io.github.louistsaitszho.erg2000.Consts;
-import io.github.louistsaitszho.erg2000.interfaces.HideFAB;
 import io.github.louistsaitszho.erg2000.R;
 import io.github.louistsaitszho.erg2000.SearchParams;
 import io.github.louistsaitszho.erg2000.fragment.HistoryFragment;
 import io.github.louistsaitszho.erg2000.fragment.SearchFragment;
 import io.github.louistsaitszho.erg2000.fragment.StatisticFragment;
+import io.github.louistsaitszho.erg2000.interfaces.HideFAB;
+import io.github.louistsaitszho.erg2000.realm.RealmController;
 
-public class MainActivity extends AppCompatActivity implements HideFAB {
+public class MainActivity extends AppCompatActivity implements HideFAB, ActivityCompat.OnRequestPermissionsResultCallback {
 
   public static final String TAG = MainActivity.class.getSimpleName();
+  private static final int REQUEST_CODE = 6174;
 
   ChangeLog cl;
 
@@ -56,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
     setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
 
-    //TODO replace it with changeloglib
+    //TODO replace it with changeloglib?
     cl = new ChangeLog(this);
+
+    writeToStoragePermissionHandling();
 
     setSupportActionBar(toolbar);
     ActionBar actionBar = getSupportActionBar();
@@ -183,6 +193,18 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
     switch (item.getItemId()) {
       case R.id.action_settings:
         Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
+        new MaterialDialog.Builder(MainActivity.this).onPositive(new MaterialDialog.SingleButtonCallback() {
+          @Override
+          public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            if (hasWriteExternalStoragePermission()) {
+              RealmController.with(MainActivity.this).exportDatabase();
+              Toast.makeText(MainActivity.this, "check download 2000", Toast.LENGTH_SHORT).show();
+            } else {
+              Toast.makeText(MainActivity.this, "please grand me permission and try again", Toast.LENGTH_SHORT).show();
+              writeToStoragePermissionHandling();
+            }
+          }
+        }).positiveText(R.string.backup).show();
         break;
       case R.id.action_about:
         openAboutActivity();
@@ -201,9 +223,9 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
         .withAboutVersionShown(true)
         .withAboutVersionShownName(true)
         .withAboutVersionShownCode(true)
-        .withActivityTitle("About")
-        .withAboutAppName("2000")
-        .withAboutDescription("Keep track of your indoor rowing record")
+        .withActivityTitle(getString(R.string.about))
+        .withAboutAppName(getString(R.string.app_name))
+        .withAboutDescription(getString(R.string.about_description))
         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
         .start(this);
   }
@@ -216,6 +238,26 @@ public class MainActivity extends AppCompatActivity implements HideFAB {
   private void openSearchResultActivity(SearchParams searchParams) {
     //TODO
     Toast.makeText(MainActivity.this, R.string.coming_soon, Toast.LENGTH_LONG).show();
+  }
+
+  private boolean hasWriteExternalStoragePermission() {
+    return ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+  }
+
+  private void writeToStoragePermissionHandling() {
+    if (!hasWriteExternalStoragePermission()) {
+      ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (requestCode == REQUEST_CODE) {
+      if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        Log.d(TAG, "permission granted");
+
+      }
+    }
   }
 
   @Override

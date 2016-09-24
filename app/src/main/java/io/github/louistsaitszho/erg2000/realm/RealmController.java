@@ -2,10 +2,14 @@ package io.github.louistsaitszho.erg2000.realm;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseArray;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +21,7 @@ import io.github.louistsaitszho.erg2000.realm.realmObject.Tag;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.exceptions.RealmIOException;
 
 /**
  * Use this controller to access the Realm db
@@ -24,6 +29,7 @@ import io.realm.RealmResults;
  */
 
 public class RealmController {
+  public static final String TAG = RealmController.class.getSimpleName();
 
   private static RealmController controller;
   private final Realm realm;
@@ -134,6 +140,24 @@ public class RealmController {
     }
     query.contains("tags.tag", tags.get(tags.size()-1).getTag());
     return query.findAll();
+  }
+
+  public void exportDatabase() {
+    try {
+      String root = Environment.getExternalStorageDirectory().toString();
+      File myDir = new File(root + "/Download/2000");
+      myDir.mkdirs();
+      File exportPath = new File(myDir, "export.realm");
+      if (exportPath.exists())
+        exportPath.delete();
+      realm.writeCopyTo(exportPath);
+    } catch (RealmIOException e) {
+      e.printStackTrace();
+      Log.d(TAG, "backup failed");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    realm.close();
   }
 
 }
