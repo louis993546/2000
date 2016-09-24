@@ -53,7 +53,8 @@ public class CardErgoRecordAdapter extends RealmRecyclerViewAdapter<Record, Card
       holder.tvRating.setText(String.valueOf(record.getAverageRating()));
       holder.tvPace.setText(Utils.generatePaceString(record));
       holder.tvDistance.setText(String.valueOf(record.getTotalDistance()));
-      holder.tvStartDateTime.setText(Utils.generateStartDateTimeString(record.getStartDateTime(), Locale.getDefault()));
+      Log.d(TAG, record.getStartDateTime().getTime() + " vs " + System.currentTimeMillis());
+      holder.tvStartDateTime.setText(Utils.TimeAgo.toTimeAgo(System.currentTimeMillis() - record.getStartDateTime().getTime()));
 
       //TODO 3d touch details
 //      holder.llCard.setOnLongClickListener(new View.OnLongClickListener() {

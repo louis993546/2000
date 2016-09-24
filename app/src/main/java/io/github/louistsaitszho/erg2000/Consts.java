@@ -13,6 +13,10 @@ public class Consts {
   public final static int MS_IN_SECOND = 1000;
   public final static int MS_IN_MINUTE = 60 * MS_IN_SECOND;
   public final static int MS_IN_HOUR = 60 * MS_IN_MINUTE;
+  public final static int S_IN_MIN = 60;
+  public final static int MIN_IN_HOUR = 60;
+  public final static int HOUR_IN_DAY = 24;
+  public final static int DAY_IN_WEEK = 7;
 
   public final static int DP_ADD_RECORD_ICON = 18;
   public static final int LENGTH_PRIMARY_KEY = 16;
