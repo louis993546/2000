@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -34,6 +35,10 @@ public class ViewRecordActivity extends AppCompatActivity {
   @BindView(R.id.tvRemark) TextView tvRemark;
   @BindView(R.id.tvStartDateTime) TextView tvStartDateTime;
   @BindView(R.id.tvEventDescription) TextView tvEventDescription;
+  @BindView(R.id.tvTime) TextView tvTime;
+  @BindView(R.id.tvMeter) TextView tvMeter;
+  @BindView(R.id.tvPace) TextView tvPace;
+  @BindView(R.id.tvRating) TextView tvRating;
   @BindView(R.id.rlRows) RecyclerView rvRows;
 
   @Override
@@ -63,7 +68,11 @@ public class ViewRecordActivity extends AppCompatActivity {
           tvRemark.setText(thisRecord.getRemark());
           tvRemark.setText(thisRecord.getEvent());
           tvStartDateTime.setText(Utils.generateStartDateTimeString(thisRecord.getStartDateTime(), Locale.getDefault()));
-          //TODO inflate UI
+          tvTime.setText(Utils.generateDurationString(thisRecord));
+          tvMeter.setText(String.valueOf(thisRecord.getTotalDistance()));
+          tvPace.setText(Utils.generatePaceString(thisRecord));
+          tvRating.setText(String.valueOf(thisRecord.getAverageRating()));
+          //TODO the rest of the UI
           rvRows.setLayoutManager(new LinearLayoutManager(ViewRecordActivity.this, LinearLayoutManager.VERTICAL, false));
           rvRows.setAdapter(new ItemRowRowAdapter(thisRecord));
         }
@@ -87,6 +96,8 @@ public class ViewRecordActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == android.R.id.home)
       this.onBackPressed();
+    else if (item.getItemId() == R.id.action_edit)
+      Toast.makeText(ViewRecordActivity.this, R.string.coming_soon, Toast.LENGTH_SHORT).show();
     return super.onOptionsItemSelected(item);
   }
 }
