@@ -54,7 +54,7 @@ public class Utils {
     mins = TimeUnit.MILLISECONDS.toMinutes(per500MS);
     secs = TimeUnit.MILLISECONDS.toSeconds(per500MS) - TimeUnit.MINUTES.toSeconds(mins);
     mils = Math.round((per500MS - TimeUnit.MINUTES.toMillis(mins) - TimeUnit.SECONDS.toMillis(secs)) / 100);
-    return String.format("%d:%02d.%d", mins, secs, mils);
+    return String.format(Locale.getDefault(), "%d:%02d.%d", mins, secs, mils);
   }
 
   /**
@@ -72,9 +72,9 @@ public class Utils {
 
     String output;
     if (hours == 0) {
-      output = String.format("%d:%02d.%d", minutes, seconds, decisecond);
+      output = String.format(Locale.getDefault(), "%d:%02d.%d", minutes, seconds, decisecond);
     } else {
-      output = String.format("%d:%02d:%02d.%d", hours, minutes, seconds, decisecond);
+      output = String.format(Locale.getDefault(), "%d:%02d:%02d.%d", hours, minutes, seconds, decisecond);
     }
 
     if (isRest)
@@ -129,33 +129,35 @@ public class Utils {
     return output;
   }
 
-  public static String randomString(int length) {
-    return new RandomString(length).nextString();
-  }
-
   public static class RandomString {
-
     private static final char[] symbols;
-
     static {
       StringBuilder tmp = new StringBuilder();
       for (char ch = '0'; ch <= '9'; ++ch)
         tmp.append(ch);
       for (char ch = 'a'; ch <= 'z'; ++ch)
         tmp.append(ch);
+      for (char ch = 'A'; ch <= 'Z'; ++ch)
+        tmp.append(ch);
       symbols = tmp.toString().toCharArray();
     }
-
     private final Random random = new Random();
-
     private final char[] buf;
 
+    /**
+     * create new RandomString instance
+     * @param length of the random string
+     */
     public RandomString(int length) {
       if (length < 1)
         throw new IllegalArgumentException("length < 1: " + length);
       buf = new char[length];
     }
 
+    /**
+     * Generate random string
+     * @return random string
+     */
     public String nextString() {
       for (int idx = 0; idx < buf.length; ++idx)
         buf[idx] = symbols[random.nextInt(symbols.length)];
@@ -170,35 +172,28 @@ public class Utils {
     public final static long HOUR = Consts.MIN_IN_HOUR * MINUTE;
     public final static long DAY = Consts.HOUR_IN_DAY * HOUR;
     public final static long WEEK = Consts.DAY_IN_WEEK * DAY;
-    public final static long MONTH = (long) (30.4375 * DAY);
-    public final static long YEAR = (long) (365.25 * DAY);
+    public final static long MONTH = (long) (30.4375 * DAY);    //TODO probably not the best idea
+    public final static long YEAR = (long) (365.25 * DAY);      //TODO probably not the best idea
 
+    /**
+     * TODO better way to do this?
+     * @param dateMsDiff time difference in millisecond
+     * @return String of how long ago
+     */
     public static String toTimeAgo(long dateMsDiff) {
-      if (dateMsDiff < MINUTE)
+      if (dateMsDiff < 2*SECOND)
         return "Just now";
-      else if (dateMsDiff < 2 * MINUTE)
-        return "A minute ago";
+      else if (dateMsDiff < MINUTE)
+        return (dateMsDiff / SECOND + "s");
       else if (dateMsDiff < 50 * MINUTE)
-        return (dateMsDiff / MINUTE + " minutes ago");
-      else if (dateMsDiff < 80 * MINUTE)
-        return "An hour ago";
+        return (dateMsDiff / MINUTE + "m");
       else if (dateMsDiff < 24 * HOUR)
-        return (dateMsDiff / HOUR + " hours ago");
-      else if (dateMsDiff < 36 * HOUR)
-        return ("A day ago");
+        return (dateMsDiff / HOUR + "h");
       else if (dateMsDiff < WEEK)
-        return (dateMsDiff / DAY + " days ago");
-      else if (dateMsDiff < 2 * WEEK)
-        return "A week ago";
-      else if (dateMsDiff < MONTH)
-        return (dateMsDiff / WEEK + " weeks ago");
-      else if (dateMsDiff < 2 * MONTH)
-        return "A month ago";
+        return (dateMsDiff / DAY + "d");
       else if (dateMsDiff < YEAR)
-        return (dateMsDiff / MONTH + " months ago");
-      else if (dateMsDiff < 2 * YEAR)
-        return "A year ago";
-      else return (dateMsDiff / YEAR + " years ago");
+        return (dateMsDiff / WEEK + "w");
+      else return (dateMsDiff / YEAR + "y");
     }
   }
 
@@ -211,8 +206,8 @@ public class Utils {
    * "4x2000m/1:00r"
    * "10x500m/:30r"
    *
-   * @param rows
-   * @return a list of suggestions
+   * @param rows of newly entered data
+   * @return a list of suggestions (nullable)
    */
 //  public static List<String> eventDescriptionGenerator(List<Row> rows) {
 //    if (rows == null) {

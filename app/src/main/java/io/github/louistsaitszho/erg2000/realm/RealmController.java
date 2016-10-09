@@ -87,7 +87,7 @@ public class RealmController {
   public void addRecord(long startDateTime, @Nullable CharSequence remark, long totalDistance, long totalDuration, long averageRating, @Nullable CharSequence eventDescription, List<String> tags, SparseArray<Row> rowSparseArray) {
     realm.beginTransaction();
     Record newRecord = realm.createObject(Record.class);
-    newRecord.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
+    newRecord.setId(new Utils.RandomString(Consts.LENGTH_PRIMARY_KEY).nextString());
     newRecord.setStartDateTime(new Date(startDateTime));
     if (remark != null)
       newRecord.setRemark(remark.toString());
@@ -99,14 +99,14 @@ public class RealmController {
     if (tags != null && tags.size() > 0) {
       for (String tag:tags) {
         Tag newTag = realm.createObject(Tag.class);
-        newTag.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
+        newTag.setId(new Utils.RandomString(Consts.LENGTH_PRIMARY_KEY).nextString());
         newTag.setTag(tag);
         newRecord.tags.add(newTag);
       }
     }
     for (int i = 0; i < rowSparseArray.size(); i++) {
       Row newRow = realm.createObject(Row.class);
-      newRow.setId(Utils.randomString(Consts.LENGTH_PRIMARY_KEY));
+      newRow.setId(new Utils.RandomString(Consts.LENGTH_PRIMARY_KEY).nextString());
       Row r = rowSparseArray.get(rowSparseArray.keyAt(i));
       newRow.setEasy(r.isEasy());
       newRow.setDistance(r.getDistance());

@@ -138,4 +138,5 @@
     <string name="about">About</string>
     <string name="about_description">Keep track of your indoor rowing record</string>
     <string name="backup">Backup</string>
+    <string name="view_detail">View Detail</string>
 </resources>

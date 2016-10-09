@@ -94,8 +94,6 @@ public class MainActivity extends AppCompatActivity implements HideFAB, Activity
       getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, historyFragment).commit();
     }
 
-
-
   }
 
   private void inflateBottomNavigationBar() {
@@ -214,6 +212,10 @@ public class MainActivity extends AppCompatActivity implements HideFAB, Activity
         break;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  private void openSettings() {
+    //TODO
   }
 
   private void openAboutActivity() {

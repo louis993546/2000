@@ -68,31 +68,32 @@ public class SearchFragment extends Fragment implements ScrollToTop{
       cvNoRecords.setVisibility(View.GONE);
       llFilters.setVisibility(View.VISIBLE);
 
-      minDistance = records.first().getTotalDistance();
-      maxDistance = records.last().getTotalDistance();
-      Log.d(TAG, "min dist: " + minDistance + "/max dist: " + maxDistance);
-      rbDistance.setTickEnd((float) maxDistance);
-      rbDistance.setTickStart((float) minDistance);
-      if (minDistance >= 1000 || (maxDistance - minDistance >= 10000)) {
-        rbDistance.setTickInterval((float) 1000);
-        rbDistance.setPinTextListener(new RangeBar.OnRangeBarTextListener() {
-          @Override
-          public String getPinValue(RangeBar rangeBar, int tickIndex) {
-//            float distance = (minDistance + tickIndex*1000) / 1000;
-//            String output = String.format(Locale.getDefault(), "%.1f", distance) + "k";
-            long distance = (minDistance + tickIndex*1000) / 1000;
-            String output = distance + "k";
-            Log.d(TAG, "pin text: " + output);
-            return output;
-          }
-        });
-      } else if (maxDistance - minDistance >= 1000) {
-        rbDistance.setTickInterval((float) 100);
-      } else if (maxDistance - minDistance >= 100) {
-        rbDistance.setTickInterval((float) 10);
-      } else {
-        rbDistance.setTickInterval((float) 1);
-      }
+      //TODO if max distance is too large it basically stop the app
+//      minDistance = records.first().getTotalDistance();
+//      maxDistance = records.last().getTotalDistance();
+//      Log.d(TAG, "min dist: " + minDistance + "/max dist: " + maxDistance);
+//      rbDistance.setTickEnd((float) maxDistance);
+//      rbDistance.setTickStart((float) minDistance);
+//      if (minDistance >= 1000 || (maxDistance - minDistance >= 10000)) {
+//        rbDistance.setTickInterval((float) 1000);
+//        rbDistance.setPinTextListener(new RangeBar.OnRangeBarTextListener() {
+//          @Override
+//          public String getPinValue(RangeBar rangeBar, int tickIndex) {
+////            float distance = (minDistance + tickIndex*1000) / 1000;
+////            String output = String.format(Locale.getDefault(), "%.1f", distance) + "k";
+//            long distance = (minDistance + tickIndex*1000) / 1000;
+//            String output = distance + "k";
+//            Log.d(TAG, "pin text: " + output);
+//            return output;
+//          }
+//        });
+//      } else if (maxDistance - minDistance >= 1000) {
+//        rbDistance.setTickInterval((float) 100);
+//      } else if (maxDistance - minDistance >= 100) {
+//        rbDistance.setTickInterval((float) 10);
+//      } else {
+//        rbDistance.setTickInterval((float) 1);
+//      }
 
       records = records.sort("averageRating", Sort.ASCENDING);
       minRating = records.first().getAverageRating();

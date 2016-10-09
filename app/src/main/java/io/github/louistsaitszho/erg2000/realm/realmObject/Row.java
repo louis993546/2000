@@ -25,7 +25,7 @@ public class Row extends RealmObject implements Serializable{
   }
 
   public Row(boolean isEasy, long distance, long duration, Long rating) {
-    id = Utils.randomString(Consts.LENGTH_PRIMARY_KEY);
+    id = new Utils.RandomString(Consts.LENGTH_PRIMARY_KEY).nextString();
     this.isEasy = isEasy;
     this.distance = distance;
     this.duration = duration;

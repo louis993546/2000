@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+    <release version="0.4.0" versioncode="4">
+        <change>TBC</change>
+    </release>
     <release version="0.3.0" versioncode="3">
         <change>Slight UI changes (e.g. display "2 days" instead of a whole bunch of digits and symbols)</change>
         <change>Export data to local storage</change>

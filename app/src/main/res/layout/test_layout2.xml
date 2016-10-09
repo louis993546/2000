@@ -44,7 +44,6 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_margin="8dp"
-            android:src="@color/colorPrimary"
             android:layout_centerVertical="true"/>
 
         <AutoCompleteTextView
@@ -74,7 +73,6 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_margin="8dp"
-            android:src="@color/colorPrimary"
             android:layout_centerVertical="true"/>
 
         <TextView
@@ -106,7 +104,6 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_margin="8dp"
-            android:src="@color/colorPrimary"
             android:layout_centerVertical="true"/>
 
         <mabbas007.tagsedittext.TagsEditText
@@ -139,7 +136,6 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_margin="8dp"
-            android:src="@color/colorPrimary"
             android:layout_centerVertical="true"/>
 
         <EditText
@@ -170,7 +166,6 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_margin="8dp"
-            android:src="@color/colorPrimary"
             android:layout_centerVertical="true"/>
 
         <TextView
