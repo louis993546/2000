@@ -25,7 +25,9 @@
             android:label="@string/title_activity_view_record"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activity.Main2Activity">
+        <activity android:name=".activity.Main2Activity"
+                  android:theme="@style/AppTheme.Splash"
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

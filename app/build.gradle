@@ -58,5 +58,4 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
 }
