@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import io.github.louistsaitszho.erg2000.R;
 
 /**
+ * TODO split this into 2 ViewHolders: Record & EOL
  * Created by Louis on 22/9/2016.
  */
 
