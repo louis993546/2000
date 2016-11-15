@@ -53,6 +53,8 @@ public class Main2Activity extends AppCompatActivity {
   private void inflateEverything() {
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle("History");
+    getSupportActionBar().setDisplayShowHomeEnabled(true);
+    getSupportActionBar().setIcon(R.drawable.actionbar_icon);
     tabLayout.setupWithViewPager(viewPager);
     /**
      * TODO not working (not visible)
